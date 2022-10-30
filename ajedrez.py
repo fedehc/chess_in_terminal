@@ -81,14 +81,14 @@ class Tablero():
 
     # Si el movimiento es legal, cambiar. Caso contrario no se hace nada.
     # En ambos casos se finaliza retornando bool de status y mensaje:
-    status, mensaje = self.chequear_movimiento(origen, destino)
+    status, mensaje = self._chequear_movimiento(origen, destino)
     if status:
-      self.cambiar_pieza_de_posicion(origen, destino)
+      self._cambiar_pieza_de_posicion(origen, destino)
       self.movimientos += 1
 
     return status, mensaje
 
-  def chequear_movimiento(self, origen, destino):
+  def _chequear_movimiento(self, origen, destino):
     '''Método que chequea si el movimiento deseo de una pieza es legal. Recibe 2 argumentos, uno
     con el origen de una pieza de ajedrez y el otro su destino. Llama a otros métodos para
     chequear si el movimiento o ataque es legal. Retorna tupla de datos según el caso.'''
@@ -104,14 +104,14 @@ class Tablero():
     col_destino = NRO_COL[destino[1]]
 
     # 1a) Chequeando si existen casilla en origen:
-    casilla_origen = self.existe_casillero(fila_origen, col_origen)
+    casilla_origen = self._existe_casillero(fila_origen, col_origen)
     if not casilla_origen:
       status = False
       mensaje = "La casilla de origen es inválida o no existe."
 
     if casilla_origen:
       # 1b) Chequeando si existe una casilla en destino:
-      casilla_destino = self.existe_casillero(fila_destino, col_destino)
+      casilla_destino = self._existe_casillero(fila_destino, col_destino)
       if not casilla_destino:
         status = False
         mensaje = "La casilla de destino es inválida o no existe)."
@@ -123,7 +123,7 @@ class Tablero():
 
         # 3a) Chequeando si dicha pieza puede realizar un movimiento legal:
         if len(casilla_destino) == 2:
-          if self.es_movimiento_legal(casilla_origen, casilla_destino):
+          if self._es_movimiento_legal(casilla_origen, casilla_destino):
             status = True
             mensaje = f"Moviendo {NOMBRE_PIEZAS[pieza_origen]} desde {casilla_origen[:2]} " \
                     + f"hacia {casilla_destino}."
@@ -136,7 +136,7 @@ class Tablero():
           pieza_destino = casilla_destino[2] # El 3° caracter del string representa la pieza.
 
           # 3b) Chequeando si dicha pieza puede realizar un ataque legal:
-          if self.es_ataque_legal(casilla_origen, casilla_destino):
+          if self._es_ataque_legal(casilla_origen, casilla_destino):
             status = True
             mensaje = f"Atacando con {NOMBRE_PIEZAS[pieza_origen]} en {casilla_origen[:2]} " \
                       f"a {NOMBRE_PIEZAS[pieza_destino]} en {casilla_destino[:2]}."
@@ -155,7 +155,7 @@ class Tablero():
 
     return status, mensaje
 
-  def existe_casillero(self, fila, columna):
+  def _existe_casillero(self, fila, columna):
     '''Método que cheque si existe un casillero en una fila y columna recibidas por argumento.
     Retorna booleano según el caso.'''
     casilla = ""
@@ -169,7 +169,7 @@ class Tablero():
       # print(f"\n### casilla: {casilla} | fila: {fila} | columna: {columna} ###")
       return casilla
 
-  def es_movimiento_legal(self, origen, destino):
+  def _es_movimiento_legal(self, origen, destino):
     '''Método que chequea si el movimiento de una pieza es legal. Recibe 2 argumentos, uno
     con el origen de una pieza de ajedrez y el otro su destino. Retorna booleano según el caso.'''
     status = None
@@ -179,7 +179,7 @@ class Tablero():
 
     return True
 
-  def es_ataque_legal(self, origen, destino):
+  def _es_ataque_legal(self, origen, destino):
     '''Método que chequea si el ataque de una pieza es legal. Recibe 2 argumentos, uno con
     el origen de una pieza de ajedrez y el otro su destino. Retorna booleano según el caso.'''
     status = None
@@ -190,7 +190,7 @@ class Tablero():
 
     return True
 
-  def cambiar_pieza_de_posicion(self, origen, destino):
+  def _cambiar_pieza_de_posicion(self, origen, destino):
     '''Método que mueve una pieza de ajedrez de posición. Recibe 2 argumentos, uno con el
     origen de una pieza de ajedrez y el otro su destino. Este método solo modifica valores
     de un array de arrays interno.'''
