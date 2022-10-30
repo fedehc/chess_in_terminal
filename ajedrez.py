@@ -1,5 +1,4 @@
 # Librerías:
-import random
 import time
 
 # Constantes:
