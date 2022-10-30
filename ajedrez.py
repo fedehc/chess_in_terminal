@@ -222,11 +222,15 @@ class Juego():
     self.turno = BLANCAS
 
   def iniciar(self):
+    '''Método que inicia partida de ajedrez, reseteando tablero, tomando tiempo y mostrando
+    el tablero en pantalla.'''
     self.tablero.resetear_piezas()
     self.tiempo.append(time.time())
     self.mostrar()
 
   def _terminar_turno(self):
+    '''Método que muestra título de finalizar turno, asigna nuevo turno para el otro jugador y
+    registra en array el tiempo de la última partida.'''
     self._titulo(f"Turno de las {self.turno} finalizado.")
 
     if self.turno == BLANCAS:
@@ -238,9 +242,12 @@ class Juego():
     time.sleep(2)
 
   def _titulo(self, texto):
+    '''Simple método para mostrar un texto recibido por argumento a terminal/pantalla.'''
     print(f"{texto}")
 
   def mostrar(self):
+    '''Método que muestra un título seguido de una llamada a otro método para mostrar las
+    piezas del tablero de ajedrez.'''
     # Titulos:
     if self.tablero.movimientos > 0:
       self._titulo(f"\n{self.tablero.movimientos}) {self.turno.title()} moviendo:")
@@ -251,6 +258,7 @@ class Juego():
     self.tablero.mostrar_piezas()
 
   def mover(self, origen, destino):
+    '''Método que mueve una pieza desde un origen a un destino, ambos recibidos por argumento.'''
     # Chequeando que solo esten fila y col. en el origen recibido:
     if len(origen) > 2:
       origen = origen[:2]
