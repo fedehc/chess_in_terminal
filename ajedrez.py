@@ -1,7 +1,7 @@
-# Librerías:
+# Libraries:
 import time
 
-# Constantes:
+# Constants:
 WHITES = "white"
 BLACKS = "black"
 WHITE = "w"
@@ -22,7 +22,7 @@ ROWS = (1, 2, 3, 4, 5, 6, 7, 8)
 COLUMNS = ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h')
 COL_NUMBER_IN_ARRAY = {'a': 0, 'b': 1, 'c': 2, 'd': 3, 'e': 4, 'f': 5, 'g': 6, 'h': 7}
 
-# Clases:
+# Classes:
 class ChessPlayer():
   def __init__(self, name, color):
     self.name = name
@@ -38,7 +38,7 @@ class ChessBoard():
   def reset_chess_pieces(self):
     '''Method that sets up the chess pieces with the initial chess positions to start a game.'''
 
-    # Negras:
+    # Blacks:
     self.squares[0][0] += PIECES_CODE[ROOK] + BLACK
     self.squares[0][1] += PIECES_CODE[KNIGHT] + BLACK
     self.squares[0][2] += PIECES_CODE[BISHOP] + BLACK
@@ -51,7 +51,7 @@ class ChessBoard():
     for pos, _ in enumerate(self.squares[1]):
       self.squares[1][pos] += PIECES_CODE[PAWN] + BLACK
 
-    # Blancas:
+    # Whites:
     self.squares[6][0] += PIECES_CODE[ROOK] + WHITE
     self.squares[6][1] += PIECES_CODE[KNIGHT] + WHITE
     self.squares[6][2] += PIECES_CODE[BISHOP] + WHITE
@@ -70,15 +70,15 @@ class ChessBoard():
     status = None
     message = None
 
-    # Chequeando argumentos recibidos:
+    # Checking received arguments:
     if origin[0] not in ROWS and origin[1] not in COLUMNS:
-      raise ValueError("Se recibió una posición inicial inválida como argumento en método ChessBoard.mover().")
+      raise ValueError("An invalid starting position was received as an argument in ChessBoard.move_piece() method.")
 
     if destiny[0] not in ROWS and destiny[1] not in COLUMNS:
-      raise ValueError("Se recibió una posición final inválida como argumento en método ChessBoard.mover().")
+      raise ValueError("An invalid end position was received as an argument in ChessBoard.move_piece() method.")
 
-    # Si el movimiento es legal, cambiar. Caso contrario no se hace nada.
-    # En ambos casos se finaliza retornando bool de status y message:
+    # If the movement is legal, change it. Otherwise do nothing.
+    # In both cases it ends by returning status boolean and a message.:
     status, message = self._check_move(origin, destiny)
     if status:
       self._change_piece_position(origin, destiny)
@@ -98,84 +98,84 @@ class ChessBoard():
     Calls other methods to check if the move or attack is legal. Returns tuple of data according to the case.'''
     status = None
     message = None
-    casilla_origin = ""
-    casilla_destiny = ""
+    origin_square = ""
+    destiny_square = ""
 
-    # Convirtiendo a valores númericos las posiciones de origin y destiny para buscar en array:
+    # Converting the origin and destiny positions to numerical values to be able to search in array:
     row_origin = int(origin[0])-1
     col_origin = COL_NUMBER_IN_ARRAY[origin[1]]
     row_destiny = int(destiny[0])-1
     col_destiny = COL_NUMBER_IN_ARRAY[destiny[1]]
 
-    # 1a) Chequeando si existen casilla en origin:
-    casilla_origin = self._check_if_seat_exist(row_origin, col_origin)
-    if not casilla_origin:
+    # 1a) Checking if there are any square in origin:
+    origin_square = self._check_if_square_exist(row_origin, col_origin)
+    if not origin_square:
       status = False
-      message = "La casilla de origin es inválida o no existe."
+      message = "The origin square is invalid or doesn't exist."
 
-    if casilla_origin:
-      # 1b) Chequeando si existe una casilla en destiny:
-      casilla_destiny = self._check_if_seat_exist(row_destiny, col_destiny)
-      if not casilla_destiny:
+    if origin_square:
+      # 1b) Checking if there are any square in destiny:
+      destiny_square = self._check_if_square_exist(row_destiny, col_destiny)
+      if not destiny_square:
         status = False
-        message = "La casilla de destiny es inválida o no existe)."
+        message = "The destiny square is invalid or doesn't exist."
 
-    if casilla_origin and casilla_destiny:
-      # 2a) Chequeando si hay pieza en casilla origin:
-      if len(casilla_origin) > 2:
-        pieza_origin = casilla_origin[2] # El 3° caracter del string representa la pieza.
+    if origin_square and destiny_square:
+      # 2a) Checking if there is piece in origin square:
+      if len(origin_square) > 2:
+        piece_origin = origin_square[2] # The 3rd character of the string represents the name of the piece.
 
-        # 3a) Chequeando si dicha pieza puede realizar un movimiento legal:
-        if len(casilla_destiny) == 2:
-          if self._check_if_move_is_legal(casilla_origin, casilla_destiny):
+        # 3a) Checking whether the piece can make a legal move:
+        if len(destiny_square) == 2:
+          if self._check_if_move_is_legal(origin_square, destiny_square):
             status = True
-            message = f"Moviendo {PIECES_NAMES[pieza_origin]} desde {casilla_origin[:2]} " \
-                    + f"hacia {casilla_destiny}."
+            message = f"Moving {PIECES_NAMES[piece_origin]} from {origin_square[:2]} " \
+                    + f"to {destiny_square}."
           else:
             status = False
-            message = "Este movimiento no es legal para esta pieza."
+            message = "This movement is not legal for this piece."
 
-        # 2b) Chequeando si se puede comer una pieza enemiga en destiny:
-        elif len(casilla_destiny) > 2:
-          pieza_destiny = casilla_destiny[2] # El 3° caracter del string representa la pieza.
+        # 2b) Checking if it is possible to attack an enemy piece in destiny:
+        elif len(destiny_square) > 2:
+          piece_destiny = destiny_square[2] # The 3rd character of the string represents the name of the piece.
 
-          # 3b) Chequeando si dicha pieza puede realizar un ataque legal:
-          if self._check_if_attack_is_legal(casilla_origin, casilla_destiny):
+          # 3b) Checking if the piece can perform a legal attack:
+          if self._check_if_attack_is_legal(origin_square, destiny_square):
             status = True
-            message = f"Atacando con {PIECES_NAMES[pieza_origin]} en {casilla_origin[:2]} " \
-                      f"a {PIECES_NAMES[pieza_destiny]} en {casilla_destiny[:2]}."
+            message = f"Atacando con {PIECES_NAMES[piece_origin]} en {origin_square[:2]} " \
+                      f"a {PIECES_NAMES[piece_destiny]} en {destiny_square[:2]}."
           else:
             status = False
-            message = "Este ataque no es legal para esta pieza."
+            message = "This attack is not legal for this piece."
 
         else:
           status = False
-          message = "Error desconocido."
+          message = "Unknown error."
 
-      # 2b) Si no hay pieza de origin, fijar status y message correspondiente:
-      elif len(casilla_origin) == 2:
+      # 2b) If there is no piece at origin, set the corresponding status and message:
+      elif len(origin_square) == 2:
         status = False
-        message = f"No se encontró ninguna pieza en la casilla {casilla_origin}."
+        message = f"No piece was found in the square {origin_square}."
 
     return status, message
 
-  def _check_if_seat_exist(self, row, column):
+  def _check_if_square_exist(self, row, column):
     '''Method that checks if there is a square in a row and column received by arguments. Returns boolean according to the case.'''
-    casilla = ""
+    square = ""
 
     try:
-      casilla = self.squares[row][column]
+      square = self.squares[row][column]
     except TypeError as error:
       # print(f"\n### ERROR: {error} ###")
       pass
     finally:
-      # print(f"\n### casilla: {casilla} | row: {row} | column: {column} ###")
-      return casilla
+      # print(f"\n### square: {square} | row: {row} | column: {column} ###")
+      return square
 
   def _check_if_move_is_legal(self, origin, destiny):
     '''Method that checks if the movement of a piece is legal. It receives 2 arguments, one with the origin of a chess piece and the other with its destiny. Returns boolean according to the case.'''
     status = None
-    pieza_origin = origin[2]  # El 3° caracter del string representa la pieza.
+    piece_origin = origin[2]  # The 3rd character of the string represents the name of the piece.
     pos_origin = origin[0:2]
     pos_destiny = destiny[0:2]
 
@@ -184,9 +184,8 @@ class ChessBoard():
   def _check_if_attack_is_legal(self, origin, destiny):
     '''Method that checks if the attack of a piece is legal. It receives 2 arguments, one with the origin of a chess piece and the other with its destiny. Returns boolean according to the case.'''
     status = None
-    pieza_origin = origin[2]  # El 3° caracter del string representa la pieza.
-    pieza_destiny = destiny[2]  # El 3° caracter del string representa la pieza.
-    pos_origin = origin[0:2]
+    piece_origin = origin[2]    # The 3rd character of the string represents the name of the piece.
+    piece_destiny = destiny[2]  # Idem above.
     pos_destiny = destiny[0:2]
 
     return True
@@ -194,18 +193,18 @@ class ChessBoard():
   def _change_piece_position(self, origin, destiny):
     '''Method that moves a chess piece from its current position. It receives 2 arguments, one with the origin of a chess piece and the other with its destiny.
     This method only modifies values of an internal array of arrays.'''
-    pieza = origin[2:]  # 3° y 4° caracteres representan pieza y color.
+    piece = origin[2:]  # 3rd and 4th characters represent piece and color.
 
-    row_origin = int(origin[0]) - 1    # Restar 1 porque se empieza desde cero en array.
+    row_origin = int(origin[0]) - 1    # Subtract 1 because array starts from zero.
     col_origin = COL_NUMBER_IN_ARRAY[origin[1]]
-    row_destiny = int(destiny[0]) - 1  # Restar 1 porque se empieza desde cero en array.
+    row_destiny = int(destiny[0]) - 1  # Subtract 1 because array starts from zero.
     col_destiny = COL_NUMBER_IN_ARRAY[destiny[1]]
-    # print(f"\n### pieza:{pieza} | row_origin:{row_origin} | col_origin:{col_origin} | row_destiny:{row_destiny} | col_destiny:{col_destiny} ###\n")
+    # print(f"\n### piece:{piece} | row_origin:{row_origin} | col_origin:{col_origin} | row_destiny:{row_destiny} | col_destiny:{col_destiny} ###\n")
 
-    # Poniendo pieza en casilla de destiny:
-    self.squares[row_destiny][col_destiny] += pieza
+    # Putting the piece in the destination square:
+    self.squares[row_destiny][col_destiny] += piece
 
-    # Quitando pieza en casilla de origin (borrando pieza y color):
+    # Removing piece in origin square (removing piece and color strings):
     self.squares[row_origin][col_origin] = self.squares[row_origin][col_origin][0:2]
 
 
@@ -223,22 +222,22 @@ class ChessGame():
 
   def show_pieces(self):
     '''Method that displays a title followed by a call to another method to display the chessboard pieces.'''
-    # Titulos:
+    # Titles:
     if self.board.movements > 0:
       self._show_title(f"\n{self.board.movements}) {self.player_turn.title()}'s moving:")
     else:
       self._show_title(f"\n{self.board.movements}) Starting new game.")
 
-    # Mostrar piezas del tablero:
+    # Showing pieces on board:
     self.board.show_pieces()
 
   def move_piece(self, origin, destiny):
     '''Method that moves a part from its origin to its destination, both received by argument.'''
-    # Chequeando que solo esten row y col. en el origin recibido:
+    # Checking that only row and column are in the received origin:
     if len(origin) > 2:
       origin = origin[:2]
-    # Tomando la pieza existente en casillas y agregarlo a origin:
-    row_origin = int(origin[0]) - 1   # Restar 1 porque se empieza desde cero en array.
+    # Getting the existing piece in square and add it to origin:
+    row_origin = int(origin[0]) - 1   # Subtract 1 because array starts from zero.
     col_origin = COL_NUMBER_IN_ARRAY[origin[1]]
     origin = self.board.squares[row_origin][col_origin]
 
