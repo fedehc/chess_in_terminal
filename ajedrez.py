@@ -87,6 +87,13 @@ class Tablero():
 
     return status, mensaje
 
+  def mostrar_piezas(self):
+    '''Método que imprime por pantalla las piezas actuales en sus respectivos casilleros.'''
+    print()
+    for filas in self.casillas:
+      print(filas)
+    print()
+
   def _chequear_movimiento(self, origen, destino):
     '''Método que chequea si el movimiento deseo de una pieza es legal. Recibe 2 argumentos, uno
     con el origen de una pieza de ajedrez y el otro su destino. Llama a otros métodos para
@@ -207,13 +214,6 @@ class Tablero():
     # Quitando pieza en casilla de origen (borrando pieza y color):
     self.casillas[fila_origen][col_origen] = self.casillas[fila_origen][col_origen][0:2]
 
-  def mostrar_piezas(self):
-    '''Método que imprime por pantalla las piezas actuales en sus respectivos casilleros.'''
-    print()
-    for filas in self.casillas:
-      print(filas)
-    print()
-
 
 class Juego():
   def __init__(self):
@@ -227,23 +227,6 @@ class Juego():
     self.tablero.resetear_piezas()
     self.tiempo.append(time.time())
     self.mostrar()
-
-  def _terminar_turno(self):
-    '''Método que muestra título de finalizar turno, asigna nuevo turno para el otro jugador y
-    registra en array el tiempo de la última partida.'''
-    self._titulo(f"Turno de las {self.turno} finalizado.")
-
-    if self.turno == BLANCAS:
-      self.turno = NEGRAS
-    else:
-      self.turno = BLANCAS
-
-    self.tiempo.append(time.time())
-    time.sleep(2)
-
-  def _titulo(self, texto):
-    '''Simple método para mostrar un texto recibido por argumento a terminal/pantalla.'''
-    print(f"{texto}")
 
   def mostrar(self):
     '''Método que muestra un título seguido de una llamada a otro método para mostrar las
@@ -271,6 +254,23 @@ class Juego():
     self.tablero.mover_pieza(origen, destino)
     self.mostrar()
     self._terminar_turno()
+
+  def _terminar_turno(self):
+    '''Método que muestra título de finalizar turno, asigna nuevo turno para el otro jugador y
+    registra en array el tiempo de la última partida.'''
+    self._titulo(f"Turno de las {self.turno} finalizado.")
+
+    if self.turno == BLANCAS:
+      self.turno = NEGRAS
+    else:
+      self.turno = BLANCAS
+
+    self.tiempo.append(time.time())
+    time.sleep(2)
+
+  def _titulo(self, texto):
+    '''Simple método para mostrar un texto recibido por argumento a terminal/pantalla.'''
+    print(f"{texto}")
 
 
 if __name__ == "__main__":
