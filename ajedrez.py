@@ -227,8 +227,8 @@ class Juego():
     self.tiempo.append(time.time())
     self.mostrar()
 
-  def terminar_turno(self):
-    self.titulo(f"Turno de las {self.turno} finalizado.")
+  def _terminar_turno(self):
+    self._titulo(f"Turno de las {self.turno} finalizado.")
 
     if self.turno == BLANCAS:
       self.turno = NEGRAS
@@ -238,15 +238,15 @@ class Juego():
     self.tiempo.append(time.time())
     time.sleep(2)
 
-  def titulo(self, texto):
+  def _titulo(self, texto):
     print(f"{texto}")
 
   def mostrar(self):
     # Titulos:
     if self.tablero.movimientos > 0:
-      self.titulo(f"\n{self.tablero.movimientos}) {self.turno.title()} moviendo:")
+      self._titulo(f"\n{self.tablero.movimientos}) {self.turno.title()} moviendo:")
     else:
-      self.titulo(f"\n{self.tablero.movimientos}) Iniciando partida.")
+      self._titulo(f"\n{self.tablero.movimientos}) Iniciando partida.")
 
     # Mostrar piezas del tablero:
     self.tablero.mostrar_piezas()
@@ -263,14 +263,13 @@ class Juego():
     # Mover, mostrar y terminar turno:
     self.tablero.mover_pieza(origen, destino)
     self.mostrar()
-    self.terminar_turno()
+    self._terminar_turno()
 
 
 if __name__ == "__main__":
   juego = Juego()
-  #juego.mostrar()
   juego.iniciar()
 
   juego.mover("7a", "6a")
-  # juego.mover("7b", "5b")
-  # juego.mover("7c", "6c")
+  #juego.mover("7b", "5b")
+  #juego.mover("7c", "6c")
