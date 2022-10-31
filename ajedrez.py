@@ -205,7 +205,7 @@ class ChessBoard():
     # print(f"\n### piece:{piece} | row_origin:{row_origin} | col_origin:{col_origin} | row_destiny:{row_destiny} | col_destiny:{col_destiny} ###\n")
 
     # Putting the piece in the destination square:
-    self.squares[row_destiny][col_destiny] += piece
+    self.squares[row_destiny][col_destiny] = self.squares[row_destiny][col_destiny][0:2] + piece
 
     # Removing piece in origin square (removing piece and color strings):
     self.squares[row_origin][col_origin] = self.squares[row_origin][col_origin][0:2]
@@ -297,7 +297,7 @@ class ChessGame():
       self.player_turn = WHITES
 
     self.turn_times.append(time.time())
-    time.sleep(2)
+    time.sleep(1)
 
 
 if __name__ == "__main__":
@@ -305,5 +305,8 @@ if __name__ == "__main__":
   chess_game.start()
 
   chess_game.move_piece("7a", "6a")
-  chess_game.move_piece("7b", "5b")
-  chess_game.move_piece("7c", "6c")
+  chess_game.move_piece("2b", "4b")
+  chess_game.move_piece("7c", "5c")
+  chess_game.move_piece("4b", "5c")
+
+  # print(f"\n# 5c: {chess_game.board.squares[4][2]}\n")
