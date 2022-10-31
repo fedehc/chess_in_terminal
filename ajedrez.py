@@ -216,7 +216,7 @@ class ChessGame():
     self.board = ChessBoard()
     self.turn_times = []
     self.player_turn = WHITES
-    self.console = Console(color_system="truecolor")
+    self.console = Console(color_system="256")
 
   def start(self):
     '''Method that starts a chess game, resetting the board, taking initial time and displaying the board with its pieces on terminal/screen.'''
@@ -233,22 +233,24 @@ class ChessGame():
     # Show board and current chess pieces as a table in screen/terminal:
     # Title:
     if self.board.movements > 0:
-      table_title = f"{self.board.movements}) {self.player_turn.title()}'s turn:"
+      table_title = f"{self.board.movements}) {self.player_turn.title()}'s move:"
     else:
       table_title = f"New game:"
 
     table = Table(title=table_title, show_header=True, show_lines=True, box=box.ROUNDED)
 
+    style = "italic not bold grey3"
+
     # Set 8 columns:
-    table.add_column("[i]a[/i]", justify="center", style="black", no_wrap=True)
-    table.add_column("[i]b[/i]", justify="center", style="black", no_wrap=True)
-    table.add_column("[i]c[/i]", justify="center", style="black", no_wrap=True)
-    table.add_column("[i]d[/i]", justify="center", style="black", no_wrap=True)
-    table.add_column("[i]e[/i]", justify="center", style="black", no_wrap=True)
-    table.add_column("[i]f[/i]", justify="center", style="black", no_wrap=True)
-    table.add_column("[i]g[/i]", justify="center", style="black", no_wrap=True)
-    table.add_column("[i]h[/i]", justify="center", style="black", no_wrap=True)
-    table.add_column(" ", justify="center", style="italic", no_wrap=True)
+    table.add_column(f"[{style}]a[/{style}]", justify="center", style="black", no_wrap=True)
+    table.add_column(f"[{style}]b[/{style}]", justify="center", style="black", no_wrap=True)
+    table.add_column(f"[{style}]c[/{style}]", justify="center", style="black", no_wrap=True)
+    table.add_column(f"[{style}]d[/{style}]", justify="center", style="black", no_wrap=True)
+    table.add_column(f"[{style}]e[/{style}]", justify="center", style="black", no_wrap=True)
+    table.add_column(f"[{style}]f[/{style}]", justify="center", style="black", no_wrap=True)
+    table.add_column(f"[{style}]g[/{style}]", justify="center", style="black", no_wrap=True)
+    table.add_column(f"[{style}]h[/{style}]", justify="center", style="black", no_wrap=True)
+    table.add_column(" ", justify="center", style="italic grey11", no_wrap=True)
 
     # Set the 8 rows with the current pieces:
     for row_number, row_board in enumerate(full_board, 1):
