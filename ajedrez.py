@@ -232,7 +232,7 @@ class ChessGame():
     # Show board and current chess pieces as a table in screen/terminal:
     # Title:
     if self.board.movements > 0:
-      table = Table(title=f"{self.board.movements}) {self.player_turn.title()}'s move:",
+      table = Table(title=f"{self.board.movements}) {self.player_turn.title()}'s turn:",
                     show_header=False, show_lines=True, box=box.ROUNDED)
     else:
       table = Table(title=f"New game:", show_header=False, show_lines=True, box=box.ROUNDED)
