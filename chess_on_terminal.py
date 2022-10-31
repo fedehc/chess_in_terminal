@@ -12,7 +12,6 @@ WHITES = "white"
 BLACKS = "black"
 WHITE = "w"
 BLACK = "b"
-
 KING = "King"
 QUEEN = "Queen"
 ROOK = "Rook"
@@ -104,10 +103,6 @@ class ChessBoard():
       self.movements += 1
 
     return status, message
-
-  def get_pieces(self):
-    '''Method that returns all current chess pieces as array of arrays.'''
-    return self.squares
 
   def _check_move(self, origin, destiny):
     '''Method that checks if the desired movement of a chess piece is legal. It receives 2 arguments, one with the origin of a piece and the other with its destiny.
@@ -232,7 +227,7 @@ class TUI():
   def show_pieces(self, board, players):
     '''Method that displays a title followed by a call to another method to display the chessboard pieces.'''
     # Get all current pieces from board:
-    full_board = board.get_pieces()
+    full_board = board.squares
     table_title = ""
 
     # Show board and current chess pieces as a table in terminal.
