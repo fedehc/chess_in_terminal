@@ -1,5 +1,11 @@
-# Libraries:
+# Standard libraries:
 import time
+
+# 3° libraries:
+from rich.console import Console
+from rich.table import Table
+from rich import box
+
 
 # Constants:
 WHITES = "white"
@@ -86,12 +92,9 @@ class ChessBoard():
 
     return status, message
 
-  def show_pieces(self):
-    '''Method that prints on screen the current chess pieces in their current positions.'''
-    print()
-    for rows in self.squares:
-      print(rows)
-    print()
+  def get_pieces(self):
+    '''Method that returns all current chess pieces as array of arrays.'''
+    return self.squares
 
   def _check_move(self, origin, destiny):
     '''Method that checks if the desired movement of a chess piece is legal. It receives 2 arguments, one with the origin of a piece and the other with its destiny.
@@ -213,6 +216,7 @@ class ChessGame():
     self.board = ChessBoard()
     self.turn_times = []
     self.player_turn = WHITES
+    self.console = Console(color_system="truecolor")
 
   def start(self):
     '''Method that starts a chess game, resetting the board, taking initial time and displaying the board with its pieces on terminal/screen.'''
@@ -222,14 +226,35 @@ class ChessGame():
 
   def show_pieces(self):
     '''Method that displays a title followed by a call to another method to display the chessboard pieces.'''
-    # Titles:
-    if self.board.movements > 0:
-      self._show_title(f"\n{self.board.movements}) {self.player_turn.title()}'s moving:")
-    else:
-      self._show_title(f"\n{self.board.movements}) Starting new game.")
+    # Get all current pieces from board:
+    full_board = self.board.get_pieces()
 
-    # Showing pieces on board:
-    self.board.show_pieces()
+    # Show board and current chess pieces as a table in screen/terminal:
+    # Title:
+    if self.board.movements > 0:
+      table = Table(title=f"{self.board.movements}) {self.player_turn.title()}'s move:",
+                    show_header=False, show_lines=True, box=box.ROUNDED)
+    else:
+      table = Table(title=f"New game:", show_header=False, show_lines=True, box=box.ROUNDED)
+
+    # Set 8 columns:
+    table.add_column("    ", justify="center", style="black", no_wrap=True)
+    table.add_column("    ", justify="center", style="black", no_wrap=True)
+    table.add_column("    ", justify="center", style="black", no_wrap=True)
+    table.add_column("    ", justify="center", style="black", no_wrap=True)
+    table.add_column("    ", justify="center", style="black", no_wrap=True)
+    table.add_column("    ", justify="center", style="black", no_wrap=True)
+    table.add_column("    ", justify="center", style="black", no_wrap=True)
+    table.add_column("    ", justify="center", style="black", no_wrap=True)
+
+    # Set the 8 rows with the current pieces:
+    for row_number, row_board in enumerate(full_board, 1):
+      row_board = self._format_square_according_to_color_piece(row_board)
+      table.add_row(*row_board)   # Passing as strings (not full list).
+
+    # Show table in terminal/screen:
+    print()
+    self.console.print(table)
 
   def move_piece(self, origin, destiny):
     '''Method that moves a part from its origin to its destination, both received by argument.'''
@@ -246,9 +271,25 @@ class ChessGame():
     self.show_pieces()
     self._finish_turn()
 
+  def _format_square_according_to_color_piece(self, row):
+    '''Method that receives an array argument and returns it modified according to its content.'''
+    new_row = []
+
+    for square in row:
+      # If the square contains a piece (and its color), style the piece (letter) with its
+      # corresponding color (and discard the rest):
+      if len(square) == 4:
+        if square[-1] == WHITE:
+          new_row.append(f"[black on white][{square[2]}][/black on white]")
+        else:
+          new_row.append(f"[white on black][{square[2]}][/white on black]")
+      else:
+        new_row.append("")
+
+    return new_row
+
   def _finish_turn(self):
     '''Method that displays end turn title, assigns new turn for the other player and records the last game time in array.'''
-    self._show_title(f"{self.player_turn.title()}'s end of turn.")
 
     if self.player_turn == WHITES:
       self.player_turn = BLACKS
@@ -258,15 +299,11 @@ class ChessGame():
     self.turn_times.append(time.time())
     time.sleep(2)
 
-  def _show_title(self, text):
-    '''Simple method to display a text received by argument to screen/terminal.'''
-    print(f"{text}")
-
 
 if __name__ == "__main__":
   chess_game = ChessGame()
   chess_game.start()
 
   chess_game.move_piece("7a", "6a")
-  #chess_game.move_piece("7b", "5b")
-  #chess_game.move_piece("7c", "6c")
+  chess_game.move_piece("7b", "5b")
+  chess_game.move_piece("7c", "6c")
