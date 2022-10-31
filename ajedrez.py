@@ -29,16 +29,29 @@ COLUMNS = ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h')
 COL_NUMBER_IN_ARRAY = {'a': 0, 'b': 1, 'c': 2, 'd': 3, 'e': 4, 'f': 5, 'g': 6, 'h': 7}
 
 # Classes:
-class ChessPlayer():
-  def __init__(self, name, color):
-    self.name = name
-    self.color = color
+class ChessPlayers():
+  '''The class that keeps record of all players relevant data.'''
+  def __init__(self, name1="Player 1", color1=WHITES, name2="Player 2"):
+    self.turn_times = []
+    self.player_turn = WHITES
+
+    # Player 1:
+    self.player_1_name = name1
+    self.player_1_color = color1
+
+    # Player 2:
+    self.player_2_name = name2
+    if self.player_1_color == WHITES:
+      player_2_color = BLACKS
+    else:
+      self.player_2_color = WHITES
 
 
 class ChessBoard():
+  '''The class that keeps record of all of the pieces and moves.'''
   def __init__(self):
     self.squares = [[f"{fil+1}{col}" for col in COLUMNS]
-                                      for fil in range(8)]
+                                     for fil in range(8)]
     self.movements = 0
 
   def reset_chess_pieces(self):
@@ -211,36 +224,28 @@ class ChessBoard():
     self.squares[row_origin][col_origin] = self.squares[row_origin][col_origin][0:2]
 
 
-class ChessGame():
+class TUI():
+  '''The Text User Interface class that shows the chessboard on screen via terminal.'''
   def __init__(self):
-    self.board = ChessBoard()
-    self.turn_times = []
-    self.player_turn = WHITES
     self.console = Console(color_system="256")
 
-  def start(self):
-    '''Method that starts a chess game, resetting the board, taking initial time and displaying the board with its pieces on terminal/screen.'''
-    self.board.reset_chess_pieces()
-    self.turn_times.append(time.time())
-    self.show_pieces()
-
-  def show_pieces(self):
+  def show_pieces(self, board, players):
     '''Method that displays a title followed by a call to another method to display the chessboard pieces.'''
     # Get all current pieces from board:
     table_title = ""
-    full_board = self.board.get_pieces()
+    full_board = board.get_pieces()
 
     # Show board and current chess pieces as a table in screen/terminal:
-    # Title:
-    if self.board.movements > 0:
-      table_title = f"{self.board.movements}) {self.player_turn.title()}'s move:"
+    # Table title:
+    if board.movements > 0:
+      table_title = f"{board.movements}) {players.player_turn.title()}'s move:"
     else:
       table_title = f"New game:"
 
+    # Table:
     table = Table(title=table_title, show_header=True, show_lines=True, box=box.ROUNDED)
 
     style = "italic not bold grey3"
-
     # Set 8 columns:
     table.add_column(f"[{style}]a[/{style}]", justify="center", style="black", no_wrap=True)
     table.add_column(f"[{style}]b[/{style}]", justify="center", style="black", no_wrap=True)
@@ -262,21 +267,6 @@ class ChessGame():
     print()
     self.console.print(table)
 
-  def move_piece(self, origin, destiny):
-    '''Method that moves a part from its origin to its destination, both received by argument.'''
-    # Checking that only row and column are in the received origin:
-    if len(origin) > 2:
-      origin = origin[:2]
-    # Getting the existing piece in square and add it to origin:
-    row_origin = int(origin[0]) - 1   # Subtract 1 because array starts from zero.
-    col_origin = COL_NUMBER_IN_ARRAY[origin[1]]
-    origin = self.board.squares[row_origin][col_origin]
-
-    # Mover, mostrar y terminar turno:
-    self.board.move_piece(origin, destiny)
-    self.show_pieces()
-    self._finish_turn()
-
   def _format_square_according_to_color_piece(self, row):
     '''Method that receives an array argument and returns it modified according to its content.'''
     new_row = []
@@ -294,15 +284,44 @@ class ChessGame():
 
     return new_row
 
+
+class ChessGame():
+  '''The class that uses the others to run the game.'''
+  def __init__(self):
+    self.board = ChessBoard()
+    self.players = ChessPlayers()
+    self.tui = TUI()
+
+  def start(self):
+    '''Method that starts a chess game, resetting the board, taking initial time and displaying the board with its pieces on terminal/screen.'''
+    self.board.reset_chess_pieces()
+    self.players.turn_times.append(time.time())
+    self.tui.show_pieces(self.board, self.players)
+
+  def move_piece(self, origin, destiny):
+    '''Method that moves a part from its origin to its destination, both received by argument.'''
+    # Checking that only row and column are in the received origin:
+    if len(origin) > 2:
+      origin = origin[:2]
+    # Getting the existing piece in square and add it to origin:
+    row_origin = int(origin[0]) - 1   # Subtract 1 because array starts from zero.
+    col_origin = COL_NUMBER_IN_ARRAY[origin[1]]
+    origin = self.board.squares[row_origin][col_origin]
+
+    # Mover, mostrar y terminar turno:
+    self.board.move_piece(origin, destiny)
+    self.tui.show_pieces(self.board, self.players)
+    self._finish_turn()
+
   def _finish_turn(self):
     '''Method that displays end turn title, assigns new turn for the other player and records the last game time in array.'''
 
-    if self.player_turn == WHITES:
-      self.player_turn = BLACKS
+    if self.players.player_turn == WHITES:
+      self.players.player_turn = BLACKS
     else:
-      self.player_turn = WHITES
+      self.players.player_turn = WHITES
 
-    self.turn_times.append(time.time())
+    self.players.turn_times.append(time.time())
     time.sleep(1)
 
 
