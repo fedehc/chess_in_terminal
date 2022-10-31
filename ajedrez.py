@@ -48,7 +48,7 @@ class ChessPlayers():
 
 
 class ChessBoard():
-  '''The class that keeps record of all of the pieces and moves.'''
+  '''The class that keeps track of all the pieces and allows their movements.'''
   def __init__(self):
     self.squares = [[f"{fil+1}{col}" for col in COLUMNS]
                                      for fil in range(8)]
@@ -294,8 +294,9 @@ class ChessGame():
   def start(self):
     '''Method that starts a chess game, resetting the board, taking initial time and displaying the board with its pieces on terminal/screen.'''
     self.board.reset_chess_pieces()
-    self.players.history.append(["Start new game", time.time()])
+    self.players.history.append(["Game start", "---", time.ctime()])
     self.tui.show_pieces(self.board, self.players)
+    time.sleep(1.5)
 
   def move_piece(self, origin, destiny):
     '''Method that moves a part from its origin to its destination, both received by argument.'''
@@ -310,13 +311,18 @@ class ChessGame():
     # Mover, mostrar y terminar turno:
     self.board.move_piece(origin, destiny)
     self.tui.show_pieces(self.board, self.players)
-    self._finish_turn()
+    self._finish_turn(origin, destiny)
 
-  def _finish_turn(self):
-    '''Method that displays end turn title, assigns new turn for the other player and records the last game time in array.'''
+  def _finish_turn(self, origin, destiny):
+    '''Method that record last move and time, and assigns new turn for the other player.'''
 
-    # Record turn time:
-    self.players.history.append([self.players.turn, time.time()])
+    # Record last player turn, last piece move and time:
+    piece = PIECES_NAMES[origin[2:3].capitalize()]
+    origin_square = origin[0:2]
+    destiny_square = destiny[0:2]
+    self.players.history.append([self.players.turn,
+                                 f"{piece}: {origin_square} -> {destiny_square}",
+                                 time.ctime()])
 
     # Change player turn:
     if self.players.turn == WHITES:
@@ -324,7 +330,7 @@ class ChessGame():
     else:
       self.players.turn = WHITES
 
-    time.sleep(1)
+    time.sleep(1.5)
 
 
 if __name__ == "__main__":
@@ -336,5 +342,5 @@ if __name__ == "__main__":
   game.move_piece("7c", "5c")
   game.move_piece("4b", "5c")
 
-  print(f"\n{game.players.history}\n")
-  # print(f"\n# 5c: {game.board.squares[4][2]}\n")
+  #print(f"\n{game.players.history}\n")
+  #print(f"\n# 5c: {game.board.squares[4][2]}\n")
