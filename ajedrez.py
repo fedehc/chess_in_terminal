@@ -58,17 +58,17 @@ class ChessBoard():
       self.squares[1][pos] += PIECES_CODE[PAWN] + BLACK
 
     # Whites:
-    self.squares[6][0] += PIECES_CODE[ROOK] + WHITE
-    self.squares[6][1] += PIECES_CODE[KNIGHT] + WHITE
-    self.squares[6][2] += PIECES_CODE[BISHOP] + WHITE
-    self.squares[6][3] += PIECES_CODE[KING] + WHITE
-    self.squares[6][4] += PIECES_CODE[QUEEN] + WHITE
-    self.squares[6][5] += PIECES_CODE[BISHOP] + WHITE
-    self.squares[6][6] += PIECES_CODE[KNIGHT] + WHITE
-    self.squares[6][7] += PIECES_CODE[ROOK] + WHITE
-
     for pos, _ in enumerate(self.squares[7]):
-      self.squares[7][pos] += PIECES_CODE[PAWN] + WHITE
+      self.squares[6][pos] += PIECES_CODE[PAWN] + WHITE
+
+    self.squares[7][0] += PIECES_CODE[ROOK] + WHITE
+    self.squares[7][1] += PIECES_CODE[KNIGHT] + WHITE
+    self.squares[7][2] += PIECES_CODE[BISHOP] + WHITE
+    self.squares[7][3] += PIECES_CODE[KING] + WHITE
+    self.squares[7][4] += PIECES_CODE[QUEEN] + WHITE
+    self.squares[7][5] += PIECES_CODE[BISHOP] + WHITE
+    self.squares[7][6] += PIECES_CODE[KNIGHT] + WHITE
+    self.squares[7][7] += PIECES_CODE[ROOK] + WHITE
 
   def move_piece(self, origin, destiny):
     '''Method that moves a piece from its origin square to its destination square, according to the values passed as arguments.
