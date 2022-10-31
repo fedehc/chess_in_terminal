@@ -1,4 +1,6 @@
 # Chess On Terminal
+**[Work in progress]**
+
 ## A simple game of chess to play on terminal console.
 
 ### Description:
@@ -9,8 +11,9 @@ Made in Python and using only the Rich library (which is the only dependency nee
 ### Installation:
 1) If you don't already have it, install the latest version of Python from the [oficial website](https://www.python.org/downloads/).
 2) Download this repository:
-    1) git clone
-    2) Download zip from repository and unzip it in any folder.
+    - If you like to use the terminal console:
+    `git clone https://github.com/FedeHC/chess-on-terminal.git`
+    - Or just download the zip from the current repository and unzip it in any folder.
 
 ### Run:
-3) Just run the [chess_on_terminal.py](chess_on_terminal.py) script file. 😉
+- Run the [chess_on_terminal.py](chess_on_terminal.py) file. 🙂
