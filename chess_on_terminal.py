@@ -240,7 +240,7 @@ class TUI():
     # Table:
     table = Table(title=table_title, show_header=True, show_lines=True, box=box.ROUNDED)
 
-    style = "italic not bold grey3"
+    style = "italic not bold grey11"
     # Set 9 columns (8 plus 1 for board letters):
     table.add_column(f"[{style}]a[/{style}]", justify="center", style="black", no_wrap=True)
     table.add_column(f"[{style}]b[/{style}]", justify="center", style="black", no_wrap=True)
@@ -250,7 +250,7 @@ class TUI():
     table.add_column(f"[{style}]f[/{style}]", justify="center", style="black", no_wrap=True)
     table.add_column(f"[{style}]g[/{style}]", justify="center", style="black", no_wrap=True)
     table.add_column(f"[{style}]h[/{style}]", justify="center", style="black", no_wrap=True)
-    table.add_column(" ", justify="center", style="italic grey11", no_wrap=True)
+    table.add_column(" ", justify="center", style=style, no_wrap=True)
 
     # Set the 8 rows with the current pieces:
     for row_number, row_board in enumerate(full_board, 1):
