@@ -227,29 +227,33 @@ class ChessGame():
   def show_pieces(self):
     '''Method that displays a title followed by a call to another method to display the chessboard pieces.'''
     # Get all current pieces from board:
+    table_title = ""
     full_board = self.board.get_pieces()
 
     # Show board and current chess pieces as a table in screen/terminal:
     # Title:
     if self.board.movements > 0:
-      table = Table(title=f"{self.board.movements}) {self.player_turn.title()}'s turn:",
-                    show_header=False, show_lines=True, box=box.ROUNDED)
+      table_title = f"{self.board.movements}) {self.player_turn.title()}'s turn:"
     else:
-      table = Table(title=f"New game:", show_header=False, show_lines=True, box=box.ROUNDED)
+      table_title = f"New game:"
+
+    table = Table(title=table_title, show_header=True, show_lines=True, box=box.ROUNDED)
 
     # Set 8 columns:
-    table.add_column("    ", justify="center", style="black", no_wrap=True)
-    table.add_column("    ", justify="center", style="black", no_wrap=True)
-    table.add_column("    ", justify="center", style="black", no_wrap=True)
-    table.add_column("    ", justify="center", style="black", no_wrap=True)
-    table.add_column("    ", justify="center", style="black", no_wrap=True)
-    table.add_column("    ", justify="center", style="black", no_wrap=True)
-    table.add_column("    ", justify="center", style="black", no_wrap=True)
-    table.add_column("    ", justify="center", style="black", no_wrap=True)
+    table.add_column("[i]a[/i]", justify="center", style="black", no_wrap=True)
+    table.add_column("[i]b[/i]", justify="center", style="black", no_wrap=True)
+    table.add_column("[i]c[/i]", justify="center", style="black", no_wrap=True)
+    table.add_column("[i]d[/i]", justify="center", style="black", no_wrap=True)
+    table.add_column("[i]e[/i]", justify="center", style="black", no_wrap=True)
+    table.add_column("[i]f[/i]", justify="center", style="black", no_wrap=True)
+    table.add_column("[i]g[/i]", justify="center", style="black", no_wrap=True)
+    table.add_column("[i]h[/i]", justify="center", style="black", no_wrap=True)
+    table.add_column(" ", justify="center", style="italic", no_wrap=True)
 
     # Set the 8 rows with the current pieces:
     for row_number, row_board in enumerate(full_board, 1):
       row_board = self._format_square_according_to_color_piece(row_board)
+      row_board.append(str(ROWS[row_number-1]))
       table.add_row(*row_board)   # Passing as strings (not full list).
 
     # Show table in terminal/screen:
