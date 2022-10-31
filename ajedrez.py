@@ -32,8 +32,8 @@ COL_NUMBER_IN_ARRAY = {'a': 0, 'b': 1, 'c': 2, 'd': 3, 'e': 4, 'f': 5, 'g': 6, '
 class ChessPlayers():
   '''The class that keeps record of all players relevant data.'''
   def __init__(self, name1="Player 1", color1=WHITES, name2="Player 2"):
-    self.turn_times = []
-    self.player_turn = WHITES
+    self.history = []
+    self.turn = WHITES
 
     # Player 1:
     self.player_1_name = name1
@@ -232,13 +232,13 @@ class TUI():
   def show_pieces(self, board, players):
     '''Method that displays a title followed by a call to another method to display the chessboard pieces.'''
     # Get all current pieces from board:
-    table_title = ""
     full_board = board.get_pieces()
+    table_title = ""
 
-    # Show board and current chess pieces as a table in screen/terminal:
+    # Show board and current chess pieces as a table in terminal.
     # Table title:
     if board.movements > 0:
-      table_title = f"{board.movements}) {players.player_turn.title()}'s move:"
+      table_title = f"{board.movements}) {players.turn.title()}'s move:"
     else:
       table_title = f"New game:"
 
@@ -246,7 +246,7 @@ class TUI():
     table = Table(title=table_title, show_header=True, show_lines=True, box=box.ROUNDED)
 
     style = "italic not bold grey3"
-    # Set 8 columns:
+    # Set 9 columns (8 plus 1 for board letters):
     table.add_column(f"[{style}]a[/{style}]", justify="center", style="black", no_wrap=True)
     table.add_column(f"[{style}]b[/{style}]", justify="center", style="black", no_wrap=True)
     table.add_column(f"[{style}]c[/{style}]", justify="center", style="black", no_wrap=True)
@@ -263,7 +263,7 @@ class TUI():
       row_board.append(str(ROWS[row_number-1]))
       table.add_row(*row_board)   # Passing as strings (not full list).
 
-    # Show table in terminal/screen:
+    # Show table in terminal:
     print()
     self.console.print(table)
 
@@ -272,8 +272,7 @@ class TUI():
     new_row = []
 
     for square in row:
-      # If the square contains a piece (and its color), style the piece (letter) with its
-      # corresponding color (and discard the rest):
+      # If the square contains a piece and its color, style it as such (and discard the rest):
       if len(square) == 4:
         if square[-1] == WHITE:
           new_row.append(f"[black on white][{square[2]}][/black on white]")
@@ -295,7 +294,7 @@ class ChessGame():
   def start(self):
     '''Method that starts a chess game, resetting the board, taking initial time and displaying the board with its pieces on terminal/screen.'''
     self.board.reset_chess_pieces()
-    self.players.turn_times.append(time.time())
+    self.players.history.append(["Start new game", time.time()])
     self.tui.show_pieces(self.board, self.players)
 
   def move_piece(self, origin, destiny):
@@ -316,22 +315,26 @@ class ChessGame():
   def _finish_turn(self):
     '''Method that displays end turn title, assigns new turn for the other player and records the last game time in array.'''
 
-    if self.players.player_turn == WHITES:
-      self.players.player_turn = BLACKS
-    else:
-      self.players.player_turn = WHITES
+    # Record turn time:
+    self.players.history.append([self.players.turn, time.time()])
 
-    self.players.turn_times.append(time.time())
+    # Change player turn:
+    if self.players.turn == WHITES:
+      self.players.turn = BLACKS
+    else:
+      self.players.turn = WHITES
+
     time.sleep(1)
 
 
 if __name__ == "__main__":
-  chess_game = ChessGame()
-  chess_game.start()
+  game = ChessGame()
+  game.start()
 
-  chess_game.move_piece("7a", "6a")
-  chess_game.move_piece("2b", "4b")
-  chess_game.move_piece("7c", "5c")
-  chess_game.move_piece("4b", "5c")
+  game.move_piece("7a", "6a")
+  game.move_piece("2b", "4b")
+  game.move_piece("7c", "5c")
+  game.move_piece("4b", "5c")
 
-  # print(f"\n# 5c: {chess_game.board.squares[4][2]}\n")
+  print(f"\n{game.players.history}\n")
+  # print(f"\n# 5c: {game.board.squares[4][2]}\n")
