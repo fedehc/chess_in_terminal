@@ -295,16 +295,18 @@ class ChessGame():
     time.sleep(1.5)
 
   def move_piece(self, source, destination):
-    '''Method that moves a chess part from its source to its destination, both received by argument.'''
-    # Checking that there is only a row and a column in the received source:
+    '''Method that moves a chess part from its source to its destination, both received by argument.
+    This method calls another method from ChessBoard class to complete the task.'''
+    # 1) Get piece from source.
+    # Checking that there is only a row and a column in source:
     if len(source) > 2:
       source = source[:2]
-    # Getting the existing piece in square and add it to source:
+    # Get current piece in square and add it to source:
     row_source = int(source[0]) - 1   # Subtract 1 because array starts from zero.
     col_source = COL_NUMBER_IN_ARRAY[source[1]]
     source = self.board.squares[row_source][col_source]
 
-    # Mover, mostrar y terminar turno:
+    # 2) Move piece to destination and end turn:
     self.board.move_piece(source, destination)
     self.tui.show_pieces(self.board, self.players)
     self._finish_turn(source, destination)
