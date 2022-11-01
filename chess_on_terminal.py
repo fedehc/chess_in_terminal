@@ -47,7 +47,7 @@ class ChessPlayers():
 
 
 class ChessBoard():
-  '''The class that keeps track of all the pieces and allows their movements.'''
+  '''The class that keeps track of all the pieces on a chessboard and enables their movements.'''
   def __init__(self):
     self.squares = [[f"{fil+1}{col}" for col in COLUMNS]
                                      for fil in range(8)]
@@ -55,7 +55,6 @@ class ChessBoard():
 
   def reset_chess_pieces(self):
     '''Method that sets up the chess pieces with the initial chess positions to start a game.'''
-
     # Blacks:
     self.squares[0][0] += PIECES_CODE[ROOK] + BLACK
     self.squares[0][1] += PIECES_CODE[KNIGHT] + BLACK
@@ -82,79 +81,79 @@ class ChessBoard():
     self.squares[7][6] += PIECES_CODE[KNIGHT] + WHITE
     self.squares[7][7] += PIECES_CODE[ROOK] + WHITE
 
-  def move_piece(self, origin, destiny):
-    '''Method that moves a piece from its origin square to its destination square, according to the values passed as arguments.
-    The method checks if the arguments are correct and then calls other methods to check if the move is valid and, if it is, call another method to change it'''
+  def move_piece(self, source, destination):
+    '''Method that moves a piece from its source square to its destination square, according to the values passed as arguments.
+    The method checks if the arguments are correct and then calls other methods to check if the move is valid and, if it is, call another method to change it.'''
     status = None
     message = None
 
     # Checking received arguments:
-    if origin[0] not in ROWS and origin[1] not in COLUMNS:
+    if source[0] not in ROWS and source[1] not in COLUMNS:
       raise ValueError("An invalid starting position was received as an argument in ChessBoard.move_piece() method.")
 
-    if destiny[0] not in ROWS and destiny[1] not in COLUMNS:
+    if destination[0] not in ROWS and destination[1] not in COLUMNS:
       raise ValueError("An invalid end position was received as an argument in ChessBoard.move_piece() method.")
 
     # If the movement is legal, change it. Otherwise do nothing.
     # In both cases it ends by returning status boolean and a message.:
-    status, message = self._check_move(origin, destiny)
+    status, message = self._check_move(source, destination)
     if status:
-      self._change_piece_position(origin, destiny)
+      self._change_piece_position(source, destination)
       self.movements += 1
 
     return status, message
 
-  def _check_move(self, origin, destiny):
-    '''Method that checks if the desired movement of a chess piece is legal. It receives 2 arguments, one with the origin of a piece and the other with its destiny.
+  def _check_move(self, source, destination):
+    '''Method that checks if the desired movement of a chess piece is legal. It receives 2 arguments, one with the source of a piece and the other with its destination.
     Calls other methods to check if the move or attack is legal. Returns tuple of data according to the case.'''
     status = None
     message = None
-    origin_square = ""
-    destiny_square = ""
+    source_square = ""
+    destination_square = ""
 
-    # Converting the origin and destiny positions to numerical values to be able to search in array:
-    row_origin = int(origin[0])-1
-    col_origin = COL_NUMBER_IN_ARRAY[origin[1]]
-    row_destiny = int(destiny[0])-1
-    col_destiny = COL_NUMBER_IN_ARRAY[destiny[1]]
+    # Converting the source and destination positions to numerical values to be able to search in array:
+    row_source = int(source[0])-1
+    col_source = COL_NUMBER_IN_ARRAY[source[1]]
+    row_destination = int(destination[0])-1
+    col_destination = COL_NUMBER_IN_ARRAY[destination[1]]
 
-    # 1a) Checking if there are any square in origin:
-    origin_square = self._check_if_square_exist(row_origin, col_origin)
-    if not origin_square:
+    # 1a) Checking if there are any square in source:
+    source_square = self._check_if_square_exist(row_source, col_source)
+    if not source_square:
       status = False
-      message = "The origin square is invalid or doesn't exist."
+      message = "The source square is invalid or doesn't exist."
 
-    if origin_square:
-      # 1b) Checking if there are any square in destiny:
-      destiny_square = self._check_if_square_exist(row_destiny, col_destiny)
-      if not destiny_square:
+    if source_square:
+      # 1b) Checking if there are any square in destination:
+      destination_square = self._check_if_square_exist(row_destination, col_destination)
+      if not destination_square:
         status = False
-        message = "The destiny square is invalid or doesn't exist."
+        message = "The destination square is invalid or doesn't exist."
 
-    if origin_square and destiny_square:
-      # 2a) Checking if there is piece in origin square:
-      if len(origin_square) > 2:
-        piece_origin = origin_square[2] # The 3rd character of the string represents the name of the piece.
+    if source_square and destination_square:
+      # 2a) Checking if there is piece in source square:
+      if len(source_square) > 2:
+        piece_source = source_square[2] # The 3rd character of the string represents the name of the piece.
 
         # 3a) Checking whether the piece can make a legal move:
-        if len(destiny_square) == 2:
-          if self._check_if_move_is_legal(origin_square, destiny_square):
+        if len(destination_square) == 2:
+          if self._check_if_move_is_legal(source_square, destination_square):
             status = True
-            message = f"Moving {PIECES_NAMES[piece_origin]} from {origin_square[:2]} " \
-                    + f"to {destiny_square}."
+            message = f"Moving {PIECES_NAMES[piece_source]} from {source_square[:2]} " \
+                    + f"to {destination_square}."
           else:
             status = False
             message = "This movement is not legal for this piece."
 
-        # 2b) Checking if it is possible to attack an enemy piece in destiny:
-        elif len(destiny_square) > 2:
-          piece_destiny = destiny_square[2] # The 3rd character of the string represents the name of the piece.
+        # 2b) Checking if it is possible to attack an enemy piece in destination:
+        elif len(destination_square) > 2:
+          piece_destination = destination_square[2] # The 3rd character of the string represents the name of the piece.
 
           # 3b) Checking if the piece can perform a legal attack:
-          if self._check_if_attack_is_legal(origin_square, destiny_square):
+          if self._check_if_attack_is_legal(source_square, destination_square):
             status = True
-            message = f"Atacando con {PIECES_NAMES[piece_origin]} en {origin_square[:2]} " \
-                      f"a {PIECES_NAMES[piece_destiny]} en {destiny_square[:2]}."
+            message = f"Atacando con {PIECES_NAMES[piece_source]} en {source_square[:2]} " \
+                      f"a {PIECES_NAMES[piece_destination]} en {destination_square[:2]}."
           else:
             status = False
             message = "This attack is not legal for this piece."
@@ -163,15 +162,15 @@ class ChessBoard():
           status = False
           message = "Unknown error."
 
-      # 2b) If there is no piece at origin, set the corresponding status and message:
-      elif len(origin_square) == 2:
+      # 2b) If there is no piece at source, set the corresponding status and message:
+      elif len(source_square) == 2:
         status = False
-        message = f"No piece was found in the square {origin_square}."
+        message = f"No piece was found in the square {source_square}."
 
     return status, message
 
   def _check_if_square_exist(self, row, column):
-    '''Method that checks if there is a square in a row and column received by arguments. Returns boolean according to the case.'''
+    '''Method that checks if exists a square on the board according to row and column received by arguments. Returns a boolean according to the case.'''
     square = ""
 
     try:
@@ -183,40 +182,40 @@ class ChessBoard():
       # print(f"\n### square: {square} | row: {row} | column: {column} ###")
       return square
 
-  def _check_if_move_is_legal(self, origin, destiny):
-    '''Method that checks if the movement of a piece is legal. It receives 2 arguments, one with the origin of a chess piece and the other with its destiny. Returns boolean according to the case.'''
+  def _check_if_move_is_legal(self, source, destination):
+    '''Method that checks if the movement of a piece is legal. It receives 2 arguments, one with the source of a chess piece and the other with its destination. Returns boolean according to the case.'''
     status = None
-    piece_origin = origin[2]  # The 3rd character of the string represents the name of the piece.
-    pos_origin = origin[0:2]
-    pos_destiny = destiny[0:2]
+    piece_source = source[2]  # The 3rd character of the string represents the name of the piece.
+    pos_source = source[0:2]
+    pos_destination = destination[0:2]
 
     return True
 
-  def _check_if_attack_is_legal(self, origin, destiny):
-    '''Method that checks if the attack of a piece is legal. It receives 2 arguments, one with the origin of a chess piece and the other with its destiny. Returns boolean according to the case.'''
+  def _check_if_attack_is_legal(self, source, destination):
+    '''Method that checks if the attack of a piece is legal. It receives 2 arguments, one with the source of a chess piece and the other with its destination. Returns boolean according to the case.'''
     status = None
-    piece_origin = origin[2]    # The 3rd character of the string represents the name of the piece.
-    piece_destiny = destiny[2]  # Idem above.
-    pos_destiny = destiny[0:2]
+    piece_source = source[2]    # The 3rd character of the string represents the name of the piece.
+    piece_destination = destination[2]  # Idem above.
+    pos_destination = destination[0:2]
 
     return True
 
-  def _change_piece_position(self, origin, destiny):
-    '''Method that moves a chess piece from its current position. It receives 2 arguments, one with the origin of a chess piece and the other with its destiny.
-    This method only modifies values of an internal array of arrays.'''
-    piece = origin[2:]  # 3rd and 4th characters represent piece and color.
+  def _change_piece_position(self, source, destination):
+    '''Method that moves a chess piece from its current position. It receives 2 arguments, one with the source of a chess piece and the other with its destination.
+    This method only modifies the values of an array of arrays of the class.'''
+    piece = source[2:]  # 3rd and 4th characters represent piece and color.
 
-    row_origin = int(origin[0]) - 1    # Subtract 1 because array starts from zero.
-    col_origin = COL_NUMBER_IN_ARRAY[origin[1]]
-    row_destiny = int(destiny[0]) - 1  # Subtract 1 because array starts from zero.
-    col_destiny = COL_NUMBER_IN_ARRAY[destiny[1]]
-    # print(f"\n### piece:{piece} | row_origin:{row_origin} | col_origin:{col_origin} | row_destiny:{row_destiny} | col_destiny:{col_destiny} ###\n")
+    row_source = int(source[0]) - 1    # Subtract 1 because array starts from zero.
+    col_source = COL_NUMBER_IN_ARRAY[source[1]]
+    row_destination = int(destination[0]) - 1  # Subtract 1 because array starts from zero.
+    col_destination = COL_NUMBER_IN_ARRAY[destination[1]]
+    # print(f"\n### piece:{piece} | row_source:{row_source} | col_source:{col_source} | row_destination:{row_destination} | col_destination:{col_destination} ###\n")
 
     # Putting the piece in the destination square:
-    self.squares[row_destiny][col_destiny] = self.squares[row_destiny][col_destiny][0:2] + piece
+    self.squares[row_destination][col_destination] = self.squares[row_destination][col_destination][0:2] + piece
 
-    # Removing piece in origin square (removing piece and color strings):
-    self.squares[row_origin][col_origin] = self.squares[row_origin][col_origin][0:2]
+    # Removing piece in source square (removing piece and color strings):
+    self.squares[row_source][col_source] = self.squares[row_source][col_source][0:2]
 
 
 class TUI():
@@ -225,12 +224,11 @@ class TUI():
     self.console = Console(color_system="256")
 
   def show_pieces(self, board, players):
-    '''Method that displays a title followed by a call to another method to display the chessboard pieces.'''
-    # Get all current pieces from board:
-    full_board = board.squares
+    '''Method that creates a table (using Rich library) according to the position of the pieces on the board (from internal array of the class).
+    And then the content of this table is printed on the terminal.'''
+    full_board = board.squares    # Get all current pieces from board.
     table_title = ""
 
-    # Show board and current chess pieces as a table in terminal.
     # Table title:
     if board.movements > 0:
       table_title = f"{board.movements}) {players.turn.title()}'s move:"
@@ -254,8 +252,11 @@ class TUI():
 
     # Set the 8 rows with the current pieces:
     for row_number, row_board in enumerate(full_board, 1):
+      # Each square that has a piece is colored and then is saved in array:
       row_board = self._format_square_according_to_color_piece(row_board)
+      # Adding a last column of board numbers to each row in array:
       row_board.append(str(ROWS[row_number-1]))
+      # Adding each row to table:
       table.add_row(*row_board)   # Passing as strings (not full list).
 
     # Show table in terminal:
@@ -263,11 +264,11 @@ class TUI():
     self.console.print(table)
 
   def _format_square_according_to_color_piece(self, row):
-    '''Method that receives an array argument and returns it modified according to its content.'''
+    '''Method that receives an array as argument and returns it modified based on its content.'''
     new_row = []
 
     for square in row:
-      # If the square contains a piece and its color, style it as such (and discard the rest):
+      # If the square contains a piece and its color, style it as such and discard the rest:
       if len(square) == 4:
         if square[-1] == WHITE:
           new_row.append(f"[black on white][{square[2]}][/black on white]")
@@ -280,43 +281,43 @@ class TUI():
 
 
 class ChessGame():
-  '''The class that uses the others to run the game.'''
+  '''The class that uses all the others classes to run the game.'''
   def __init__(self):
     self.board = ChessBoard()
     self.players = ChessPlayers()
     self.tui = TUI()
 
   def start(self):
-    '''Method that starts a chess game, resetting the board, taking initial time and displaying the board with its pieces on terminal/screen.'''
+    '''A method that starts a chess game by resetting the pieces on the board to their initial positions, taking the initial time and finally displaying the board on the terminal.'''
     self.board.reset_chess_pieces()
     self.players.history.append(["Game start", "---", time.ctime()])
     self.tui.show_pieces(self.board, self.players)
     time.sleep(1.5)
 
-  def move_piece(self, origin, destiny):
-    '''Method that moves a part from its origin to its destination, both received by argument.'''
-    # Checking that only row and column are in the received origin:
-    if len(origin) > 2:
-      origin = origin[:2]
-    # Getting the existing piece in square and add it to origin:
-    row_origin = int(origin[0]) - 1   # Subtract 1 because array starts from zero.
-    col_origin = COL_NUMBER_IN_ARRAY[origin[1]]
-    origin = self.board.squares[row_origin][col_origin]
+  def move_piece(self, source, destination):
+    '''Method that moves a chess part from its source to its destination, both received by argument.'''
+    # Checking that there is only a row and a column in the received source:
+    if len(source) > 2:
+      source = source[:2]
+    # Getting the existing piece in square and add it to source:
+    row_source = int(source[0]) - 1   # Subtract 1 because array starts from zero.
+    col_source = COL_NUMBER_IN_ARRAY[source[1]]
+    source = self.board.squares[row_source][col_source]
 
     # Mover, mostrar y terminar turno:
-    self.board.move_piece(origin, destiny)
+    self.board.move_piece(source, destination)
     self.tui.show_pieces(self.board, self.players)
-    self._finish_turn(origin, destiny)
+    self._finish_turn(source, destination)
 
-  def _finish_turn(self, origin, destiny):
+  def _finish_turn(self, source, destination):
     '''Method that record last move and time, and assigns new turn for the other player.'''
 
     # Record last player turn, last piece move and time:
-    piece = PIECES_NAMES[origin[2:3].capitalize()]
-    origin_square = origin[0:2]
-    destiny_square = destiny[0:2]
+    piece = PIECES_NAMES[source[2:3].capitalize()]
+    source_square = source[0:2]
+    destination_square = destination[0:2]
     self.players.history.append([self.players.turn,
-                                 f"{piece}: {origin_square} -> {destiny_square}",
+                                 f"{piece}: {source_square} -> {destination_square}",
                                  time.ctime()])
 
     # Change player turn:
