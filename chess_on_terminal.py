@@ -79,13 +79,16 @@ class ChessRules():
 class ChessBoard():
   '''The class that keeps track of all the pieces on a chessboard and enables their movements.'''
   def __init__(self):
-    self.squares = [[f"{fil+1}{col}" for col in COLUMNS]
-                                     for fil in range(8)]
+    self.squares = None
     self.movements = 0
     self.rules = ChessRules()
 
   def reset_chess_pieces(self):
     '''Method that sets up the chess pieces with the initial chess positions to start a game.'''
+    # Creating squares array, with only row and column content in each square:
+    self.squares = [[f"{fil+1}{col}" for col in COLUMNS]
+                                     for fil in range(8)]
+
     # Blacks:
     self.squares[0][0] += PIECES_CODE[ROOK] + BLACK
     self.squares[0][1] += PIECES_CODE[KNIGHT] + BLACK
