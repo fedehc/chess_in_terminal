@@ -46,6 +46,12 @@ class ChessPlayers():
       self.player_2_color = WHITES
 
 
+class ChessRules():
+  '''The class that contains all the legal moves rules.'''
+  def __init__(self):
+    pass
+
+
 class ChessBoard():
   '''The class that keeps track of all the pieces on a chessboard and enables their movements.'''
   def __init__(self):
@@ -331,6 +337,7 @@ class ChessGame():
     time.sleep(1.5)
 
 
+# Main:
 if __name__ == "__main__":
   game = ChessGame()
   game.start()
