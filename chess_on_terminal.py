@@ -148,16 +148,14 @@ class ChessBoard():
     row_destination = int(destination[0])-1
     col_destination = COL_NUMBER_IN_ARRAY[destination[1]]
 
-    # 1a) Checking if there are any square in source:
+    # 1a) Checking if exists square in souce:
     source_square = self._check_if_square_exist(row_source, col_source)
-    if not source_square:
-      status = False
-      message = "The source square is invalid or doesn't exist."
-
     if source_square:
-      # 1b) Checking if there are any square in destination:
+
+      # 1b) Checking if exists square in destination:
       destination_square = self._check_if_square_exist(row_destination, col_destination)
       if destination_square:
+
         # 2a) Checking if there is piece in source square:
         if len(source_square) > 2:
           piece_source = source_square[2] # The 3rd character of the string represents the name of the piece.
@@ -196,18 +194,22 @@ class ChessBoard():
       else:
         status = False
         message = "The destination square is invalid or doesn't exist."
+    else:
+      status = False
+      message = "The source square is invalid or doesn't exist."
 
     return status, message
 
   def _check_if_square_exist(self, row, column):
-    '''Method that checks if exists a square on the board according to row and column received by arguments. Returns a boolean according to the case.'''
+    '''Method that checks if exists a square on the board according to row and column received by arguments. Returns a string type according to the case.'''
     square = ""
-
+    # Get square value, if exists:
     try:
       square = self.squares[row][column]
+    # If doesn't exist square, do nothing:
     except TypeError as error:
-      # print(f"\n### ERROR: {error} ###")
       pass
+    # In any case, return square value:
     finally:
       # print(f"\n### square: {square} | row: {row} | column: {column} ###")
       return square
