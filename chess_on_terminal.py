@@ -47,40 +47,47 @@ class ChessPlayers():
 
 
 class ChessRules():
-  '''The class that contains the rules with all the legal movements of the pieces within the board..'''
+  '''The class that contains the rules with all the legal moves of the pieces within the board..'''
   def __init__(self):
     pass
 
   def check_move(self, source, destination):
-    '''Method that checks if the movement of a piece is legal. It receives 2 arguments, one with the source of a chess piece and the other with its destination. Returns boolean according to the case.'''
-    status = None
-    piece_source = source[2]  # The 3rd character of the string represents the name of the piece.
-    pos_source = source[0:2]
-    pos_destination = destination[0:2]
+    '''Method that checks if the move of a piece is legal. It receives 2 arguments, one with the source of a chess piece and the other with its destination. Returns a boolean according to the case.'''
+    can_move = True
+    row_source = source[0]
+    col_source = source[1]
+    piece_source = source[2]
+    row_destination = destination[0]
+    col_destination = destination[1]
 
-    return True
+    return can_move
 
   def check_attack(self, source, destination):
     '''Method that checks if the attack of a piece is legal. It receives 2 arguments, one with the source of a chess piece and the other with its destination. Returns boolean according to the case.'''
-    status = None
-    piece_source = source[2]    # The 3rd character of the string represents the name of the piece.
-    piece_destination = destination[2]  # Idem above.
-    pos_destination = destination[0:2]
+    can_attack = True
+    piece_source = source[2]  # The 3rd character of the string represents the name of the piece.
+    row_source = source[0]
+    col_source = source[1]
+    row_destination = destination[0]
+    col_destination = destination[1]
+    piece_destination = destination[2]
 
-    return True
+    return can_attack
 
-  def _pawn_move(self):
+  def _pawn_move(self, source, destination):
+    '''Method that get all posible moves of a pawn. It receives 2 arguments, one with the source and the other with its destination. Returns a boolean according to the case.'''
     pass
 
-  def _pawn_attack(self):
+  def _pawn_attack(self, source, destination):
+    '''Method that get all posible attacks of a pawn. It receives 2 arguments, one with the source and the other with its destination. Returns a boolean according to the case.'''
     pass
 
 
 class ChessBoard():
-  '''The class that keeps track of all the pieces on a chessboard and enables their movements.'''
+  '''The class that keeps track of all the pieces on a chessboard and enables their moves.'''
   def __init__(self):
     self.squares = None
-    self.movements = 0
+    self.moves = 0
     self.rules = ChessRules()
 
   def reset_chess_pieces(self):
@@ -128,17 +135,17 @@ class ChessBoard():
     if destination[0] not in ROWS and destination[1] not in COLUMNS:
       raise ValueError("An invalid end position was received as an argument in ChessBoard.move_piece() method.")
 
-    # If the movement is legal, change it. Otherwise do nothing.
+    # If the move is legal, change it. Otherwise do nothing.
     # In both cases it ends by returning status boolean and a message.:
     status, message = self._check_move(source, destination)
     if status:
       self._change_piece_position(source, destination)
-      self.movements += 1
+      self.moves += 1
 
     return status, message
 
   def _check_move(self, source, destination):
-    '''Method that checks if the desired movement of a chess piece is legal. It receives 2 arguments, one with the source of a piece and the other with its destination.
+    '''Method that checks if the desired move of a piece is legal. It receives 2 arguments, one with the source of a piece and the other with its destination.
     Calls other methods to check if the move or attack is legal. Returns tuple of data according to the case.'''
     status = None
     message = None
@@ -168,17 +175,20 @@ class ChessBoard():
                     + f"to {destination_square}."
           else:
             status = False
-            message = "This movement is not legal for this piece."
+            message = "This move is not legal for this piece."
 
         # 2b) Checking if it is possible to attack an enemy piece in destination:
         elif len(destination_square) > 2:
-          piece_destination = destination_square[2] # The 3rd character of the string represents the name of the piece.
-
-          # 3b) Checking if the piece can perform a legal attack:
           if self.rules.check_attack(source_square, destination_square):
-            status = True
-            message = f"Atacando con {PIECES_NAMES[piece_source]} en {source_square[:2]} " \
-                      f"a {PIECES_NAMES[piece_destination]} en {destination_square[:2]}."
+            initial_square = source_square[0:2]
+            final_square = destination_square[0:2]
+            attacked_piece = destination_square[2]
+
+            # 3b) Checking if the piece can perform a legal attack:
+            if self.rules.check_attack(source_square, destination_square):
+              status = True
+              message = f"Attacking with {PIECES_NAMES[piece_source]} from {initial_square} " \
+                        f"to {PIECES_NAMES[attacked_piece]} in {final_square}."
           else:
             status = False
             message = "This attack is not legal for this piece."
@@ -194,6 +204,7 @@ class ChessBoard():
       status = False
       message = "The source or destination_square square are invalid or doesn't exist."
 
+    #print(f"### message: {message} ###")
     return status, message
 
   def _check_if_square_exist(self, row, column):
@@ -240,8 +251,8 @@ class TUI():
     table_title = ""
 
     # Table title:
-    if board.movements > 0:
-      table_title = f"{board.movements}) {players.turn.title()}'s move:"
+    if board.moves > 0:
+      table_title = f"{board.moves}) {players.turn.title()}'s move:"
     else:
       table_title = f"New game:"
 
