@@ -148,44 +148,37 @@ class ChessBoard():
     row_destination = int(destination[0])-1
     col_destination = COL_NUMBER_IN_ARRAY[destination[1]]
 
-    # 1a) Checking if exists square in souce:
+    # 1a) Checking if exists squares in souce and destination:
     source_square = self._check_if_square_exist(row_source, col_source)
-    if source_square:
+    destination_square = self._check_if_square_exist(row_destination, col_destination)
+    if source_square and destination_square:
 
-      # 1b) Checking if exists square in destination:
-      destination_square = self._check_if_square_exist(row_destination, col_destination)
-      if destination_square:
+      # 2a) Checking if there is piece in source square:
+      if len(source_square) > 2:
+        piece_source = source_square[2] # The 3rd character of the string represents the name of the piece.
 
-        # 2a) Checking if there is piece in source square:
-        if len(source_square) > 2:
-          piece_source = source_square[2] # The 3rd character of the string represents the name of the piece.
-
-          # 3a) Checking whether the piece can make a legal move:
-          if len(destination_square) == 2:
-            if self.rules.check_move(source_square, destination_square):
-              status = True
-              message = f"Moving {PIECES_NAMES[piece_source]} from {source_square[:2]} " \
-                      + f"to {destination_square}."
-            else:
-              status = False
-              message = "This movement is not legal for this piece."
-
-          # 2b) Checking if it is possible to attack an enemy piece in destination:
-          elif len(destination_square) > 2:
-            piece_destination = destination_square[2] # The 3rd character of the string represents the name of the piece.
-
-            # 3b) Checking if the piece can perform a legal attack:
-            if self.rules.check_attack(source_square, destination_square):
-              status = True
-              message = f"Atacando con {PIECES_NAMES[piece_source]} en {source_square[:2]} " \
-                        f"a {PIECES_NAMES[piece_destination]} en {destination_square[:2]}."
-            else:
-              status = False
-              message = "This attack is not legal for this piece."
-
+        # 3a) Checking whether the piece can make a legal move:
+        if len(destination_square) == 2:
+          if self.rules.check_move(source_square, destination_square):
+            status = True
+            message = f"Moving {PIECES_NAMES[piece_source]} from {source_square[:2]} " \
+                    + f"to {destination_square}."
           else:
             status = False
-            message = "Unknown error."
+            message = "This movement is not legal for this piece."
+
+        # 2b) Checking if it is possible to attack an enemy piece in destination:
+        elif len(destination_square) > 2:
+          piece_destination = destination_square[2] # The 3rd character of the string represents the name of the piece.
+
+          # 3b) Checking if the piece can perform a legal attack:
+          if self.rules.check_attack(source_square, destination_square):
+            status = True
+            message = f"Atacando con {PIECES_NAMES[piece_source]} en {source_square[:2]} " \
+                      f"a {PIECES_NAMES[piece_destination]} en {destination_square[:2]}."
+          else:
+            status = False
+            message = "This attack is not legal for this piece."
 
         # 2b) If there is no piece at source, set the corresponding status and message:
         elif len(source_square) == 2:
@@ -196,7 +189,7 @@ class ChessBoard():
         message = "The destination square is invalid or doesn't exist."
     else:
       status = False
-      message = "The source square is invalid or doesn't exist."
+      message = "The source or destination_square square are invalid or doesn't exist."
 
     return status, message
 
