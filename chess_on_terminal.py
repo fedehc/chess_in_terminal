@@ -60,26 +60,85 @@ class ChessRules():
     row_destination = destination[0]
     col_destination = destination[1]
 
+    # Get piece name from pierce source:
+    piece_name = PIECES_NAMES[piece_source]
+
+    # Call the appropiate method:
+    if piece_name == KING:
+      can_move = self._king_move(row_source, col_source, row_destination, col_destination)
+    elif piece_name == QUEEN:
+      can_move = self._queen_move(row_source, col_source, row_destination, col_destination)
+    elif piece_name == ROOK:
+      can_move = self._rook_move(row_source, col_source, row_destination, col_destination)
+    elif piece_name == BISHOP:
+      can_move = self._bishop_move(row_source, col_source, row_destination, col_destination)
+    elif piece_name == KNIGHT:
+      can_move = self._knight_move(row_source, col_source, row_destination, col_destination)
+    elif piece_name == PAWN:
+      can_move = self._pawn_move(row_source, col_source, row_destination, col_destination)
+    else:
+      raise ValueError("Invalid piece_name inside check_move method in ChessRules class.")
+
     return can_move
 
   def check_attack(self, source, destination):
-    '''Method that checks if the attack of a piece is legal. It receives 2 arguments, one with the source of a chess piece and the other with its destination. Returns boolean according to the case.'''
+    '''Method that checks if the attack of a piece is legal. It receives 2 arguments, one with the source of a chess piece and the other with its destination. Returns a boolean according to the case.'''
     can_attack = True
-    piece_source = source[2]  # The 3rd character of the string represents the name of the piece.
     row_source = source[0]
     col_source = source[1]
+    piece_source = source[2]
     row_destination = destination[0]
     col_destination = destination[1]
     piece_destination = destination[2]
 
     return can_attack
 
-  def _pawn_move(self, source, destination):
-    '''Method that get all posible moves of a pawn. It receives 2 arguments, one with the source and the other with its destination. Returns a boolean according to the case.'''
+  def _king_move(self, row_source, col_source, row_destination, col_destination):
+    '''Method that get all posible moves of a king. It receives 4 arguments, 2 with the source and the other 2 with the destination. Returns a boolean according to the case.'''
     pass
 
-  def _pawn_attack(self, source, destination):
-    '''Method that get all posible attacks of a pawn. It receives 2 arguments, one with the source and the other with its destination. Returns a boolean according to the case.'''
+  def _king_attack(self, row_source, col_source, row_destination, col_destination):
+    '''Method that get all posible attacks of a king. It receives 4 arguments, 2 with the source and the other 2 with its destination. Returns a boolean according to the case.'''
+    pass
+
+  def _quee_move(self, row_source, col_source, row_destination, col_destination):
+    '''Method that get all posible moves of a queen. It receives 4 arguments, 2 with the source and the other 2 with the destination. Returns a boolean according to the case.'''
+    pass
+
+  def _queen_attack(self, row_source, col_source, row_destination, col_destination):
+    '''Method that get all posible attacks of a queen. It receives 4 arguments, 2 with the source and the other 2 with its destination. Returns a boolean according to the case.'''
+    pass
+
+  def _rook_move(self, row_source, col_source, row_destination, col_destination):
+    '''Method that get all posible moves of a rook. It receives 4 arguments, 2 with the source and the other 2 with the destination. Returns a boolean according to the case.'''
+    pass
+
+  def _rook_attack(self, row_source, col_source, row_destination, col_destination):
+    '''Method that get all posible attacks of a rook. It receives 4 arguments, 2 with the source and the other 2 with its destination. Returns a boolean according to the case.'''
+    pass
+
+  def _bishop_move(self, row_source, col_source, row_destination, col_destination):
+    '''Method that get all posible moves of a bishop. It receives 4 arguments, 2 with the source and the other 2 with the destination. Returns a boolean according to the case.'''
+    pass
+
+  def _bishop_attack(self, row_source, col_source, row_destination, col_destination):
+    '''Method that get all posible attacks of a bishop. It receives 4 arguments, 2 with the source and the other 2 with its destination. Returns a boolean according to the case.'''
+    pass
+
+  def _knight_move(self, row_source, col_source, row_destination, col_destination):
+    '''Method that get all posible moves of a knight. It receives 4 arguments, 2 with the source and the other 2 with the destination. Returns a boolean according to the case.'''
+    pass
+
+  def _knight_attack(self, row_source, col_source, row_destination, col_destination):
+    '''Method that get all posible attacks of a knight. It receives 4 arguments, 2 with the source and the other 2 with its destination. Returns a boolean according to the case.'''
+    pass
+
+  def _pawn_move(self, row_source, col_source, row_destination, col_destination):
+    '''Method that get all posible moves of a pawn. It receives 4 arguments, 2 with the source and the other 2 with the destination. Returns a boolean according to the case.'''
+    pass
+
+  def _pawn_attack(self, row_source, col_source, row_destination, col_destination):
+    '''Method that get all posible attacks of a pawn. It receives 4 arguments, 2 with the source and the other 2 with its destination. Returns a boolean according to the case.'''
     pass
 
 
