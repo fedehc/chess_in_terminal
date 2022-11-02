@@ -53,7 +53,7 @@ class ChessRules():
 
   def check_move(self, source, destination):
     '''Method that checks if the move of a piece is legal. It receives 2 arguments, one with the source of a chess piece and the other with its destination. Returns a boolean according to the case.'''
-    can_move = True
+    can_move = None
     row_source = source[0]
     col_source = source[1]
     piece_source = source[2]
@@ -79,6 +79,7 @@ class ChessRules():
     else:
       raise ValueError("Invalid piece_name inside check_move method in ChessRules class.")
 
+    can_move = True   # TEMPORAL FIX (until all methods above are completed).
     return can_move
 
   def check_attack(self, source, destination):
@@ -101,7 +102,7 @@ class ChessRules():
     '''Method that get all posible attacks of a king. It receives 4 arguments, 2 with the source and the other 2 with its destination. Returns a boolean according to the case.'''
     pass
 
-  def _quee_move(self, row_source, col_source, row_destination, col_destination):
+  def _queen_move(self, row_source, col_source, row_destination, col_destination):
     '''Method that get all posible moves of a queen. It receives 4 arguments, 2 with the source and the other 2 with the destination. Returns a boolean according to the case.'''
     pass
 
@@ -397,7 +398,7 @@ class ChessGame():
     '''Method that record last move and time, and assigns new turn for the other player.'''
 
     # Record last player turn, last piece move and time:
-    piece = PIECES_NAMES[source[2:3].capitalize()]
+    piece = PIECES_NAMES[source[2]]
     source_square = source[0:2]
     destination_square = destination[0:2]
     self.players.history.append([self.players.turn,
