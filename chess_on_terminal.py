@@ -28,6 +28,13 @@ COLUMNS = ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h')
 COL_NUMBER_IN_ARRAY = {'a': 0, 'b': 1, 'c': 2, 'd': 3, 'e': 4, 'f': 5, 'g': 6, 'h': 7}
 
 # Classes:
+class UI():
+  '''A class uses as (informal) interface for any other UI type classes.'''
+  def show_pieces(self, board, players):
+    '''This method shows player name/turn and all current pieces from a board.'''
+    pass
+
+
 class ChessPlayers():
   '''The class that keeps record of all players relevant data.'''
   def __init__(self, name1="Player 1", color1=WHITES, name2="Player 2"):
@@ -299,7 +306,7 @@ class ChessBoard():
     self.squares[row_source][col_source] = self.squares[row_source][col_source][0:2]
 
 
-class TUI():
+class TUI(UI):
   '''The Text User Interface class that shows the chessboard on screen via terminal.'''
   def __init__(self):
     self.console = Console(color_system="256")
@@ -374,7 +381,7 @@ class ChessGame():
     '''A method that starts a chess game by resetting the pieces on the board to their initial positions, taking the initial time and finally displaying the board on the terminal.'''
     self.board.reset_chess_pieces()
     self.players.history.append(["Game start", "---", time.ctime()])
-    self.tui.show_pieces(self.board, self.players)
+    self.ui.show_pieces(self.board, self.players)
     time.sleep(1.5)
 
   def move_piece(self, source, destination):
