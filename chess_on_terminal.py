@@ -334,8 +334,10 @@ class TUI():
     for row_number, row_board in enumerate(full_board, 1):
       # Each square that has a piece is colored and then is saved in array:
       row_board = self._format_square_according_to_color_piece(row_board)
+  
       # Adding a last column of board numbers to each row in array:
       row_board.append(str(ROWS[row_number-1]))
+
       # Adding each row to table:
       table.add_row(*row_board)   # Passing as strings (not full list).
 
@@ -365,7 +367,7 @@ class ChessGame():
   def __init__(self):
     self.board = ChessBoard()
     self.players = ChessPlayers()
-    self.tui = TUI()
+    self.ui = TUI()
 
   def start(self):
     '''A method that starts a chess game by resetting the pieces on the board to their initial positions, taking the initial time and finally displaying the board on the terminal.'''
@@ -388,7 +390,7 @@ class ChessGame():
 
     # 2) Move piece to destination and end turn:
     self.board.move_piece(source, destination)
-    self.tui.show_pieces(self.board, self.players)
+    self.ui.show_pieces(self.board, self.players)
     self._finish_turn(source, destination)
 
   def _finish_turn(self, source, destination):
