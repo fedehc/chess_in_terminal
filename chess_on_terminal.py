@@ -47,8 +47,32 @@ class ChessPlayers():
 
 
 class ChessRules():
-  '''The class that contains all the legal moves rules.'''
+  '''The class that contains the rules with all the legal movements of the pieces within the board..'''
   def __init__(self):
+    pass
+
+  def check_move(self, source, destination):
+    '''Method that checks if the movement of a piece is legal. It receives 2 arguments, one with the source of a chess piece and the other with its destination. Returns boolean according to the case.'''
+    status = None
+    piece_source = source[2]  # The 3rd character of the string represents the name of the piece.
+    pos_source = source[0:2]
+    pos_destination = destination[0:2]
+
+    return True
+
+  def check_attack(self, source, destination):
+    '''Method that checks if the attack of a piece is legal. It receives 2 arguments, one with the source of a chess piece and the other with its destination. Returns boolean according to the case.'''
+    status = None
+    piece_source = source[2]    # The 3rd character of the string represents the name of the piece.
+    piece_destination = destination[2]  # Idem above.
+    pos_destination = destination[0:2]
+
+    return True
+
+  def _pawn_move(self):
+    pass
+
+  def _pawn_attack(self):
     pass
 
 
@@ -187,24 +211,6 @@ class ChessBoard():
     finally:
       # print(f"\n### square: {square} | row: {row} | column: {column} ###")
       return square
-
-  def _check_if_move_is_legal(self, source, destination):
-    '''Method that checks if the movement of a piece is legal. It receives 2 arguments, one with the source of a chess piece and the other with its destination. Returns boolean according to the case.'''
-    status = None
-    piece_source = source[2]  # The 3rd character of the string represents the name of the piece.
-    pos_source = source[0:2]
-    pos_destination = destination[0:2]
-
-    return True
-
-  def _check_if_attack_is_legal(self, source, destination):
-    '''Method that checks if the attack of a piece is legal. It receives 2 arguments, one with the source of a chess piece and the other with its destination. Returns boolean according to the case.'''
-    status = None
-    piece_source = source[2]    # The 3rd character of the string represents the name of the piece.
-    piece_destination = destination[2]  # Idem above.
-    pos_destination = destination[0:2]
-
-    return True
 
   def _change_piece_position(self, source, destination):
     '''Method that moves a chess piece from its current position. It receives 2 arguments, one with the source of a chess piece and the other with its destination.
