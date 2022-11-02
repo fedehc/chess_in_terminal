@@ -82,6 +82,7 @@ class ChessBoard():
     self.squares = [[f"{fil+1}{col}" for col in COLUMNS]
                                      for fil in range(8)]
     self.movements = 0
+    self.rules = ChessRules()
 
   def reset_chess_pieces(self):
     '''Method that sets up the chess pieces with the initial chess positions to start a game.'''
@@ -156,46 +157,45 @@ class ChessBoard():
     if source_square:
       # 1b) Checking if there are any square in destination:
       destination_square = self._check_if_square_exist(row_destination, col_destination)
-      if not destination_square:
+      if destination_square:
+        # 2a) Checking if there is piece in source square:
+        if len(source_square) > 2:
+          piece_source = source_square[2] # The 3rd character of the string represents the name of the piece.
+
+          # 3a) Checking whether the piece can make a legal move:
+          if len(destination_square) == 2:
+            if self.rules.check_move(source_square, destination_square):
+              status = True
+              message = f"Moving {PIECES_NAMES[piece_source]} from {source_square[:2]} " \
+                      + f"to {destination_square}."
+            else:
+              status = False
+              message = "This movement is not legal for this piece."
+
+          # 2b) Checking if it is possible to attack an enemy piece in destination:
+          elif len(destination_square) > 2:
+            piece_destination = destination_square[2] # The 3rd character of the string represents the name of the piece.
+
+            # 3b) Checking if the piece can perform a legal attack:
+            if self.rules.check_attack(source_square, destination_square):
+              status = True
+              message = f"Atacando con {PIECES_NAMES[piece_source]} en {source_square[:2]} " \
+                        f"a {PIECES_NAMES[piece_destination]} en {destination_square[:2]}."
+            else:
+              status = False
+              message = "This attack is not legal for this piece."
+
+          else:
+            status = False
+            message = "Unknown error."
+
+        # 2b) If there is no piece at source, set the corresponding status and message:
+        elif len(source_square) == 2:
+          status = False
+          message = f"No piece was found in the square {source_square}."
+      else:
         status = False
         message = "The destination square is invalid or doesn't exist."
-
-    if source_square and destination_square:
-      # 2a) Checking if there is piece in source square:
-      if len(source_square) > 2:
-        piece_source = source_square[2] # The 3rd character of the string represents the name of the piece.
-
-        # 3a) Checking whether the piece can make a legal move:
-        if len(destination_square) == 2:
-          if self._check_if_move_is_legal(source_square, destination_square):
-            status = True
-            message = f"Moving {PIECES_NAMES[piece_source]} from {source_square[:2]} " \
-                    + f"to {destination_square}."
-          else:
-            status = False
-            message = "This movement is not legal for this piece."
-
-        # 2b) Checking if it is possible to attack an enemy piece in destination:
-        elif len(destination_square) > 2:
-          piece_destination = destination_square[2] # The 3rd character of the string represents the name of the piece.
-
-          # 3b) Checking if the piece can perform a legal attack:
-          if self._check_if_attack_is_legal(source_square, destination_square):
-            status = True
-            message = f"Atacando con {PIECES_NAMES[piece_source]} en {source_square[:2]} " \
-                      f"a {PIECES_NAMES[piece_destination]} en {destination_square[:2]}."
-          else:
-            status = False
-            message = "This attack is not legal for this piece."
-
-        else:
-          status = False
-          message = "Unknown error."
-
-      # 2b) If there is no piece at source, set the corresponding status and message:
-      elif len(source_square) == 2:
-        status = False
-        message = f"No piece was found in the square {source_square}."
 
     return status, message
 
