@@ -60,6 +60,7 @@ class ChessRules():
 
   def check_move(self, source, destination):
     '''Method that checks if the move of a piece is legal. It receives 2 arguments, one with the source of a chess piece and the other with its destination. Returns a boolean according to the case.'''
+    # print(f"### source:{source} | destination:{destination} ###")
     can_move = None
     row_source = source[0]
     col_source = source[1]
@@ -70,19 +71,22 @@ class ChessRules():
     # Get piece name from pierce source:
     piece_name = PIECES_NAMES[piece_source]
 
+    # list of needed arguments for methods below:
+    move_arguments = (row_source, col_source, row_destination, col_destination)
+
     # Call the appropiate method:
     if piece_name == KING:
-      can_move = self._king_move(row_source, col_source, row_destination, col_destination)
+      can_move = self._king_move(*move_arguments)
     elif piece_name == QUEEN:
-      can_move = self._queen_move(row_source, col_source, row_destination, col_destination)
+      can_move = self._queen_move(*move_arguments)
     elif piece_name == ROOK:
-      can_move = self._rook_move(row_source, col_source, row_destination, col_destination)
+      can_move = self._rook_move(*move_arguments)
     elif piece_name == BISHOP:
-      can_move = self._bishop_move(row_source, col_source, row_destination, col_destination)
+      can_move = self._bishop_move(*move_arguments)
     elif piece_name == KNIGHT:
-      can_move = self._knight_move(row_source, col_source, row_destination, col_destination)
+      can_move = self._knight_move(*move_arguments)
     elif piece_name == PAWN:
-      can_move = self._pawn_move(row_source, col_source, row_destination, col_destination)
+      can_move = self._pawn_move(*move_arguments)
     else:
       raise ValueError("Invalid piece_name inside check_move method in ChessRules class.")
 
@@ -90,13 +94,39 @@ class ChessRules():
 
   def check_attack(self, source, destination):
     '''Method that checks if the attack of a piece is legal. It receives 2 arguments, one with the source of a chess piece and the other with its destination. Returns a boolean according to the case.'''
+    # print(f"### source:{source} | destination:{destination} ###")
     can_attack = True
     row_source = source[0]
     col_source = source[1]
     piece_source = source[2]
+    source_color = source[3]
     row_destination = destination[0]
     col_destination = destination[1]
     piece_destination = destination[2]
+    destination_color = destination[3]
+
+    # Get piece name from pierce source:
+    piece_name_source = PIECES_NAMES[piece_source]
+
+    # list of needed arguments for methods below:
+    attack_arguments = (row_source, col_source, row_destination, col_destination,
+                        source_color, piece_destination, destination_color)
+
+    # Call the appropiate method:
+    if piece_name_source == KING:
+      can_attack = self._king_attack(*attack_arguments)
+    elif piece_name_source == QUEEN:
+      can_attack = self._queen_attack(*attack_arguments)
+    elif piece_name_source == ROOK:
+      can_attack = self._rook_attack(*attack_arguments)
+    elif piece_name_source == BISHOP:
+      can_attack = self._bishop_attack(*attack_arguments)
+    elif piece_name_source == KNIGHT:
+      can_attack = self._knight_attack(*attack_arguments)
+    elif piece_name_source == PAWN:
+      can_attack = self._pawn_attack(*attack_arguments)
+    else:
+      raise ValueError("Invalid piece_name_source inside check_attack in ChessRules class.")
 
     return can_attack
 
@@ -106,7 +136,8 @@ class ChessRules():
 
     return valid_move
 
-  def _king_attack(self, row_source, col_source, row_destination, col_destination):
+  def _king_attack(self, row_source, col_source, row_destination, col_destination,
+                   source_color, piece_destination, destination_color):
     '''Method that check if current attack is valid for the king. It receives 4 arguments, 2 with the source and the other 2 with its destination. Returns a boolean according to the case.'''
     valid_attack = True
 
@@ -118,7 +149,8 @@ class ChessRules():
 
     return valid_move
 
-  def _queen_attack(self, row_source, col_source, row_destination, col_destination):
+  def _queen_attack(self, row_source, col_source, row_destination, col_destination,
+                    source_color, piece_destination, destination_color):
     '''Method that check if current attack is valid for the queen. It receives 4 arguments, 2 with the source and the other 2 with its destination. Returns a boolean according to the case.'''
     valid_attack = True
 
@@ -130,7 +162,8 @@ class ChessRules():
 
     return valid_move
 
-  def _rook_attack(self, row_source, col_source, row_destination, col_destination):
+  def _rook_attack(self, row_source, col_source, row_destination, col_destination,
+                   source_color, piece_destination, destination_color):
     '''Method that check if current attack is valid for the rook. It receives 4 arguments, 2 with the source and the other 2 with its destination. Returns a boolean according to the case.'''
     valid_attack = True
 
@@ -142,7 +175,8 @@ class ChessRules():
 
     return valid_move
 
-  def _bishop_attack(self, row_source, col_source, row_destination, col_destination):
+  def _bishop_attack(self, row_source, col_source, row_destination, col_destination,
+                     source_color, piece_destination, destination_color):
     '''Method that check if current attack is valid for the bishop. It receives 4 arguments, 2 with the source and the other 2 with its destination. Returns a boolean according to the case.'''
     valid_attack = True
 
@@ -154,7 +188,8 @@ class ChessRules():
 
     return valid_move
 
-  def _knight_attack(self, row_source, col_source, row_destination, col_destination):
+  def _knight_attack(self, row_source, col_source, row_destination, col_destination,
+                     source_color, piece_destination, destination_color):
     '''Method that check if current attack is valid for the knight. It receives 4 arguments, 2 with the source and the other 2 with its destination. Returns a boolean according to the case.'''
     valid_attack = True
 
@@ -166,7 +201,8 @@ class ChessRules():
 
     return valid_move
 
-  def _pawn_attack(self, row_source, col_source, row_destination, col_destination):
+  def _pawn_attack(self, row_source, col_source, row_destination, col_destination,
+                   source_color, piece_destination, destination_color):
     '''Method that check if current attack is valid for the pawn. It receives 4 arguments, 2 with the source and the other 2 with its destination. Returns a boolean according to the case.'''
     valid_attack = True
 
