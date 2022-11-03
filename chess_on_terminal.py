@@ -86,7 +86,6 @@ class ChessRules():
     else:
       raise ValueError("Invalid piece_name inside check_move method in ChessRules class.")
 
-    can_move = True   # TEMPORAL FIX (until all methods above are completed).
     return can_move
 
   def check_attack(self, source, destination):
@@ -102,52 +101,76 @@ class ChessRules():
     return can_attack
 
   def _king_move(self, row_source, col_source, row_destination, col_destination):
-    '''Method that get all posible moves of a king. It receives 4 arguments, 2 with the source and the other 2 with the destination. Returns a boolean according to the case.'''
-    pass
+    '''Method that check if the current move is valid for the king. It receives 4 arguments, 2 with the source and the other 2 with the destination. Returns a boolean according to the case.'''
+    valid_move = True
+
+    return valid_move
 
   def _king_attack(self, row_source, col_source, row_destination, col_destination):
-    '''Method that get all posible attacks of a king. It receives 4 arguments, 2 with the source and the other 2 with its destination. Returns a boolean according to the case.'''
-    pass
+    '''Method that check if current attack is valid for the king. It receives 4 arguments, 2 with the source and the other 2 with its destination. Returns a boolean according to the case.'''
+    valid_attack = True
+
+    return valid_attack
 
   def _queen_move(self, row_source, col_source, row_destination, col_destination):
-    '''Method that get all posible moves of a queen. It receives 4 arguments, 2 with the source and the other 2 with the destination. Returns a boolean according to the case.'''
-    pass
+    '''Method that check if the current move is valid for the queen. It receives 4 arguments, 2 with the source and the other 2 with the destination. Returns a boolean according to the case.'''
+    valid_move = True
+
+    return valid_move
 
   def _queen_attack(self, row_source, col_source, row_destination, col_destination):
-    '''Method that get all posible attacks of a queen. It receives 4 arguments, 2 with the source and the other 2 with its destination. Returns a boolean according to the case.'''
-    pass
+    '''Method that check if current attack is valid for the queen. It receives 4 arguments, 2 with the source and the other 2 with its destination. Returns a boolean according to the case.'''
+    valid_attack = True
+
+    return valid_attack
 
   def _rook_move(self, row_source, col_source, row_destination, col_destination):
-    '''Method that get all posible moves of a rook. It receives 4 arguments, 2 with the source and the other 2 with the destination. Returns a boolean according to the case.'''
-    pass
+    '''Method that check if the current move is valid for the rook. It receives 4 arguments, 2 with the source and the other 2 with the destination. Returns a boolean according to the case.'''
+    valid_move = True
+
+    return valid_move
 
   def _rook_attack(self, row_source, col_source, row_destination, col_destination):
-    '''Method that get all posible attacks of a rook. It receives 4 arguments, 2 with the source and the other 2 with its destination. Returns a boolean according to the case.'''
-    pass
+    '''Method that check if current attack is valid for the rook. It receives 4 arguments, 2 with the source and the other 2 with its destination. Returns a boolean according to the case.'''
+    valid_attack = True
+
+    return valid_attack
 
   def _bishop_move(self, row_source, col_source, row_destination, col_destination):
-    '''Method that get all posible moves of a bishop. It receives 4 arguments, 2 with the source and the other 2 with the destination. Returns a boolean according to the case.'''
-    pass
+    '''Method that check if the current move is valid for the bishop. It receives 4 arguments, 2 with the source and the other 2 with the destination. Returns a boolean according to the case.'''
+    valid_move = True
+
+    return valid_move
 
   def _bishop_attack(self, row_source, col_source, row_destination, col_destination):
-    '''Method that get all posible attacks of a bishop. It receives 4 arguments, 2 with the source and the other 2 with its destination. Returns a boolean according to the case.'''
-    pass
+    '''Method that check if current attack is valid for the bishop. It receives 4 arguments, 2 with the source and the other 2 with its destination. Returns a boolean according to the case.'''
+    valid_attack = True
+
+    return valid_attack
 
   def _knight_move(self, row_source, col_source, row_destination, col_destination):
-    '''Method that get all posible moves of a knight. It receives 4 arguments, 2 with the source and the other 2 with the destination. Returns a boolean according to the case.'''
-    pass
+    '''Method that check if the current move is valid for the knight. It receives 4 arguments, 2 with the source and the other 2 with the destination. Returns a boolean according to the case.'''
+    valid_move = True
+
+    return valid_move
 
   def _knight_attack(self, row_source, col_source, row_destination, col_destination):
-    '''Method that get all posible attacks of a knight. It receives 4 arguments, 2 with the source and the other 2 with its destination. Returns a boolean according to the case.'''
-    pass
+    '''Method that check if current attack is valid for the knight. It receives 4 arguments, 2 with the source and the other 2 with its destination. Returns a boolean according to the case.'''
+    valid_attack = True
+
+    return valid_attack
 
   def _pawn_move(self, row_source, col_source, row_destination, col_destination):
-    '''Method that get all posible moves of a pawn. It receives 4 arguments, 2 with the source and the other 2 with the destination. Returns a boolean according to the case.'''
-    pass
+    '''Method that check if the current move is valid for the pawn. It receives 4 arguments, 2 with the source and the other 2 with the destination. Returns a boolean according to the case.'''
+    valid_move = True
+
+    return valid_move
 
   def _pawn_attack(self, row_source, col_source, row_destination, col_destination):
-    '''Method that get all posible attacks of a pawn. It receives 4 arguments, 2 with the source and the other 2 with its destination. Returns a boolean according to the case.'''
-    pass
+    '''Method that check if current attack is valid for the pawn. It receives 4 arguments, 2 with the source and the other 2 with its destination. Returns a boolean according to the case.'''
+    valid_attack = True
+
+    return valid_attack
 
 
 class ChessBoard():
