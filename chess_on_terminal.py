@@ -48,7 +48,7 @@ class ChessPlayers():
     # Player 2:
     self.player_2_name = name2
     if self.player_1_color == WHITES:
-      player_2_color = BLACKS
+      self.player_2_color = BLACKS
     else:
       self.player_2_color = WHITES
 
