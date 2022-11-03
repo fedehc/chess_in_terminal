@@ -193,24 +193,47 @@ class ChessRules():
     # print(f"### move_data_dict:{move_data_dict}")
     valid_move = None
 
-    # Remember that black pawns in 2nd or white pawn in 7th row can move 2 squares forward:
-    if move_data_dict["piece_color"] == BLACK and move_data_dict["row_source"] == 2 or \
-       move_data_dict["piece_color"] == WHITE and move_data_dict["row_source"] == 7:
-      # Check if source and destination column are the same and
-      # The rows between source and destination are no more than 2 squares:
-      if move_data_dict["col_source"] == move_data_dict["col_destination"] and \
-         move_data_dict["row_destination"] - move_data_dict["row_source"] <= 2:
-        valid_move = True
+    # Since pawns can only move in the same column,
+    # check first if source and destination columns are the same:
+    if move_data_dict["col_source"] == move_data_dict["col_destination"]:
+
+      # Black pawns:
+      if move_data_dict["piece_color"] == BLACK:
+        # If they are in 2nd row, they can move 1 or 2 squares row-ascending:
+        if move_data_dict["row_source"] == 2:
+          # The rows between source and destination are no more than 2 squares:
+          if move_data_dict["row_destination"] - move_data_dict["row_source"] <= 2:
+            valid_move = True
+          else:
+            valid_move = False
+        # If not in 2nd row, they can only move 1 square row-ascending:
+        else:
+          if move_data_dict["row_destination"] - move_data_dict["row_source"] == 1:
+            valid_move = True
+          else:
+            valid_move = False
+
+      # White pawns:
+      elif move_data_dict["piece_color"] == WHITE:
+        # If they are in 7th row, they can move 1 or 2 squares row-descending:
+        if move_data_dict["row_source"] == 7:
+          # The rows between source and destination are no more than 2 squares:
+          if move_data_dict["row_source"] - move_data_dict["row_destination"] <= 2:
+            valid_move = True
+          else:
+            valid_move = False
+        # If not in 7th row, they can only move 1 square row-descending:
+        else:
+          if move_data_dict["row_source"] - move_data_dict["row_destination"] == 1:
+            valid_move = True
+          else:
+            valid_move = False
       else:
-        valid_move = False
+        raise ValueError("Invalid piece_color value inside dict in _pawn_move method in ChessRules class.")
+
+    # If pawns source and destination columns are not the same...
     else:
-      # Pawn can move only 1 square forward (in the same column) otherwise:
-      if move_data_dict["col_source"] == move_data_dict["col_destination"] and \
-         move_data_dict["row_destination"] - move_data_dict["row_source"] == 1:
-         
-        valid_move = True
-      else:
-        valid_move = False
+      valid_move = False
 
     # print(f"### valid_move:{valid_move} ###")
     return valid_move
@@ -515,10 +538,26 @@ if __name__ == "__main__":
   game = ChessGame()
   game.start()
 
-  game.move_piece("7a", "6a")
-  game.move_piece("2b", "4b")
+  game.move_piece("7b", "6b")
+  game.move_piece("2b", "3b")
+
   game.move_piece("7c", "5c")
-  game.move_piece("4b", "5c")
+  game.move_piece("2c", "4c")
+
+  game.move_piece("7d", "5d")
+  game.move_piece("2d", "4d")
+
+  game.move_piece("5d", "4c")
+  game.move_piece("4d", "5c")
+
+  game.move_piece("4c", "3b")
+  game.move_piece("5c", "6b")
+
+  game.move_piece("3b", "2a")
+  game.move_piece("6b", "7a")
+
+  game.move_piece("2a", "1b")
+  game.move_piece("7a", "8b")
 
   #print(f"\n{game.players.history}\n")
   #print(f"\n# 5c: {game.board.squares[4][2]}\n")
