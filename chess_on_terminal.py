@@ -67,11 +67,12 @@ class ChessRules():
 
     # Creating dict for passing to methods below:
     move_data_dict = {
-      "row_source": source[0],
-      "col_source": source[1],
+      "row_source": int(source[0]),
+      "col_source": COL_NUMBER_IN_ARRAY[source[1]]+1, # Add 1 because columms starts from 0.
       "piece_source": source[2],
-      "row_destination": destination[0],
-      "col_destination": destination[1],
+      "piece_color": source[3],
+      "row_destination": int(destination[0]),
+      "col_destination": COL_NUMBER_IN_ARRAY[destination[1]]+1  # Add 1 because columms starts from 0.
     }
 
     # Call the appropiate method:
@@ -101,14 +102,12 @@ class ChessRules():
 
     # Creating dict for passing to methods below:
     attack_data_dict = {
-      "row_source": source[0],
-      "col_source": source[1],
+      "row_source": int(source[0]),
+      "col_source": COL_NUMBER_IN_ARRAY[source[1]]+1, # Add 1 because columms starts from 0.
       "piece_source": source[2],
       "source_color": source[3],
-      "row_destination": destination[0],
-      "col_destination" : destination[1],
-      "piece_destination": destination[2],
-      "destination_color": destination[3]
+      "row_destination": int(destination[0]),
+      "col_destination": COL_NUMBER_IN_ARRAY[destination[1]]+1  # Add 1 because columms starts from 0.
     }
 
     # Call the appropiate method:
