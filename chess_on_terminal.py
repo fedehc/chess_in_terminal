@@ -190,14 +190,52 @@ class ChessRules():
 
   def _pawn_move(self, move_data_dict):
     '''Method that check if the current move is valid for the pawn. It receives 4 arguments, 2 with the source and the other 2 with the destination. Returns a boolean according to the case.'''
-    valid_move = True
+    # print(f"### move_data_dict:{move_data_dict}")
+    valid_move = None
 
+    # Remember that black pawns in 2nd or white pawn in 7th row can move 2 squares forward:
+    if move_data_dict["piece_color"] == BLACK and move_data_dict["row_source"] == 2 or \
+       move_data_dict["piece_color"] == WHITE and move_data_dict["row_source"] == 7:
+      # Check if source and destination column are the same and
+      # The rows between source and destination are no more than 2 squares:
+      if move_data_dict["col_source"] == move_data_dict["col_destination"] and \
+         move_data_dict["row_destination"] - move_data_dict["row_source"] <= 2:
+        valid_move = True
+      else:
+        valid_move = False
+    else:
+      # Pawn can move only 1 square forward (in the same column) otherwise:
+      if move_data_dict["col_source"] == move_data_dict["col_destination"] and \
+         move_data_dict["row_destination"] - move_data_dict["row_source"] == 1:
+         
+        valid_move = True
+      else:
+        valid_move = False
+
+    # print(f"### valid_move:{valid_move} ###")
     return valid_move
 
-  def _pawn_attack(attack_data_dict):
+  def _pawn_attack(self, attack_data_dict):
     '''Method that check if current attack is valid for the pawn. It receives 4 arguments, 2 with the source and the other 2 with its destination. Returns a boolean according to the case.'''
-    valid_attack = True
+    # print(f"### attack_data_dict:{attack_data_dict}")
+    valid_attack = None
 
+    # Black pawns can attack only 1 square forward row-ascending:
+    if attack_data_dict["source_color"] == BLACK:
+      if attack_data_dict["row_destination"] - attack_data_dict["row_source"] == 1 and \
+         abs(attack_data_dict["col_destination"] - attack_data_dict["col_source"]) == 1:
+        valid_attack = True
+      else:
+        valid_attack = False
+    # White pawns can attack only 1 square forward row-descending:
+    else:
+      if attack_data_dict["row_source"] - attack_data_dict["row_destination"] == 1 and \
+         abs(attack_data_dict["col_destination"] - attack_data_dict["col_source"]) == 1:
+        valid_attack = True
+      else:
+        valid_attack = False
+
+    # print(f"### valid_attack:{valid_attack} ###")
     return valid_attack
 
 
