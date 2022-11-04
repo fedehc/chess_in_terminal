@@ -27,6 +27,11 @@ ROWS = (1, 2, 3, 4, 5, 6, 7, 8)
 COLUMNS = ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h')
 COL_NUMBER_IN_ARRAY = {'a': 0, 'b': 1, 'c': 2, 'd': 3, 'e': 4, 'f': 5, 'g': 6, 'h': 7}
 
+ROW = "Row"
+COLUMN = "Column"
+DIAGONAL = "Diagonal"
+
+
 # Classes:
 class ChessPlayers():
   '''The class that keeps record of all players relevant data.'''
@@ -120,6 +125,10 @@ class ChessRules():
       raise ValueError("Invalid piece_name_source inside check_attack in ChessRules class.")
 
     return can_attack
+
+  def check_pieces_in_line(self, type_line, source, destinantion):
+    '''Method that checks if there is any pieces in a line (row, column, diagonal). Receives 3 arguments and returns boolean according to the case.'''
+    pass
 
   def _king_move(self, move_data_dict):
     '''Method that check if the current move is valid for the king. It receives 4 arguments, 2 with the source and the other 2 with the destination. Returns a boolean according to the case.'''
@@ -236,14 +245,14 @@ class ChessRules():
     # print(f"### attack_data_dict:{attack_data_dict}")
     valid_attack = None
 
-    # Black pawns can attack only 1 square forward row-ascending:
+    # Black pawns can attack only 1 square forward diagonally row-ascending:
     if attack_data_dict["source_color"] == BLACK:
       if attack_data_dict["row_destination"] - attack_data_dict["row_source"] == 1 and \
          abs(attack_data_dict["col_destination"] - attack_data_dict["col_source"]) == 1:
         valid_attack = True
       else:
         valid_attack = False
-    # White pawns can attack only 1 square forward row-descending:
+    # White pawns can attack only 1 square forward diagonally row-descending:
     else:
       if attack_data_dict["row_source"] - attack_data_dict["row_destination"] == 1 and \
          abs(attack_data_dict["col_destination"] - attack_data_dict["col_source"]) == 1:
@@ -413,7 +422,7 @@ class ChessBoard():
 
 class UI():
   '''A class uses as (informal) interface for any other UI type classes.'''
-  def show_pieces(self, board, players):
+  def show_pieces(self):
     '''This method shows player name/turn and all current pieces from a board.'''
     pass
 
