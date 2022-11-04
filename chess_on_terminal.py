@@ -126,72 +126,74 @@ class ChessRules():
 
     return can_attack
 
-  def check_pieces_in_line(self, type_line, source, destinantion):
-    '''Method that checks if there is any pieces in a line (row, column, diagonal). Receives 3 arguments and returns boolean according to the case.'''
-    pass
+  def check_any_pieces_between(self, source, destinantion):
+    '''Method that checks if there is any pieces in a line (row, column, diagonal). It receives origin and destination string arguments and returns a boolean according to the case.'''
+    piece_found = None
+
+    return piece_found
 
   def _king_move(self, move_data_dict):
-    '''Method that check if the current move is valid for the king. It receives 4 arguments, 2 with the source and the other 2 with the destination. Returns a boolean according to the case.'''
+    '''Method that check if the current move is valid for the king. It receives 1 dict argument and returns a boolean according to the case.'''
     valid_move = True
 
     return valid_move
 
-  def _king_attack(attack_data_dict):
-    '''Method that check if current attack is valid for the king. It receives 4 arguments, 2 with the source and the other 2 with its destination. Returns a boolean according to the case.'''
+  def _king_attack(self, attack_data_dict):
+    '''Method that check if current attack is valid for the king. It receives 1 dict argument and returns a boolean according to the case.'''
     valid_attack = True
 
     return valid_attack
 
   def _queen_move(self, move_data_dict):
-    '''Method that check if the current move is valid for the queen. It receives 4 arguments, 2 with the source and the other 2 with the destination. Returns a boolean according to the case.'''
+    '''Method that check if the current move is valid for the queen. It receives 1 dict argument and returns a boolean according to the case.'''
     valid_move = True
 
     return valid_move
 
-  def _queen_attack(attack_data_dict):
-    '''Method that check if current attack is valid for the queen. It receives 4 arguments, 2 with the source and the other 2 with its destination. Returns a boolean according to the case.'''
+  def _queen_attack(self, attack_data_dict):
+    '''Method that check if current attack is valid for the queen. It receives 1 dict argument and returns a boolean according to the case.'''
     valid_attack = True
 
     return valid_attack
 
   def _rook_move(self, move_data_dict):
-    '''Method that check if the current move is valid for the rook. It receives 4 arguments, 2 with the source and the other 2 with the destination. Returns a boolean according to the case.'''
+    '''Method that check if the current move is valid for the rook. It receives 1 dict argument and returns a boolean according to the case.'''
     valid_move = True
 
     return valid_move
 
-  def _rook_attack(attack_data_dict):
-    '''Method that check if current attack is valid for the rook. It receives 4 arguments, 2 with the source and the other 2 with its destination. Returns a boolean according to the case.'''
+  def _rook_attack(self, attack_data_dict):
+    '''Method that check if current attack is valid for the rook. It receives 1 dict argument and returns a boolean according to the case.'''
     valid_attack = True
 
     return valid_attack
 
   def _bishop_move(self, move_data_dict):
-    '''Method that check if the current move is valid for the bishop. It receives 4 arguments, 2 with the source and the other 2 with the destination. Returns a boolean according to the case.'''
+    '''Method that check if the current move is valid for the bishop. It receives 1 dict argument and returns a boolean according to the case.'''
     valid_move = True
 
     return valid_move
 
-  def _bishop_attack(attack_data_dict):
-    '''Method that check if current attack is valid for the bishop. It receives 4 arguments, 2 with the source and the other 2 with its destination. Returns a boolean according to the case.'''
+  def _bishop_attack(self, attack_data_dict):
+    '''Method that check if current attack is valid for the bishop. It receives 1 dict argument and returns a boolean according to the case.'''
     valid_attack = True
 
     return valid_attack
 
   def _knight_move(self, move_data_dict):
-    '''Method that check if the current move is valid for the knight. It receives 4 arguments, 2 with the source and the other 2 with the destination. Returns a boolean according to the case.'''
+    '''Method that check if the current move is valid for the knight. It receives 1 dict argument and returns a boolean according to the case.'''
     valid_move = True
 
     return valid_move
 
   def _knight_attack(attack_data_dict):
-    '''Method that check if current attack is valid for the knight. It receives 4 arguments, 2 with the source and the other 2 with its destination. Returns a boolean according to the case.'''
+    '''Method that check if current attack is valid for the knight. It receives 1 dict argument and returns a boolean according to the case.'''
     valid_attack = True
 
     return valid_attack
 
   def _pawn_move(self, move_data_dict):
-    '''Method that check if the current move is valid for the pawn. It receives 4 arguments, 2 with the source and the other 2 with the destination. Returns a boolean according to the case.'''
+    '''Method that check if the current move is valid for the pawn. It receives 1 dict argument and returns a boolean according to the case.'''
     # print(f"### move_data_dict:{move_data_dict}")
     valid_move = None
 
@@ -241,7 +243,7 @@ class ChessRules():
     return valid_move
 
   def _pawn_attack(self, attack_data_dict):
-    '''Method that check if current attack is valid for the pawn. It receives 4 arguments, 2 with the source and the other 2 with its destination. Returns a boolean according to the case.'''
+    '''Method that check if current attack is valid for the pawn. It receives 1 dict argument and returns a boolean according to the case.'''
     # print(f"### attack_data_dict:{attack_data_dict}")
     valid_attack = None
 
