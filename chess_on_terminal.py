@@ -54,13 +54,16 @@ class ChessPlayers():
 class ChessRules():
   '''The class that contains the rules with all the legal moves of the pieces within the board..'''
   def __init__(self):
-    pass
+    self.squares = None
 
-  def check_move(self, source, destination):
-    '''Method that checks if the move of a piece is legal. It receives 2 arguments, one with the source of a chess piece and the other with its destination. Returns a boolean according to the case.'''
+  def check_move(self, source, destination, squares):
+    '''Method that checks if the move of a piece is legal. It receives 3 arguments, one with the source,the other with its destination and the last with the board object.
+    Returns a boolean according to the case.'''
     # print(f"### source:{source} | destination:{destination} ###")
     can_move = None
-    # Get piece name from pierce source:
+    self.squares = squares
+
+    # Get piece name from source:
     piece_name = PIECES_NAMES[source[2]]
 
     # Creating dict for passing to methods below:
@@ -91,11 +94,14 @@ class ChessRules():
 
     return can_move
 
-  def check_attack(self, source, destination):
-    '''Method that checks if the attack of a piece is legal. It receives 2 arguments, one with the source of a chess piece and the other with its destination. Returns a boolean according to the case.'''
+  def check_attack(self, source, destination, squares):
+    '''Method that checks if the attack of a piece is legal. It receives 3 arguments, the 1st with the source, the 2nd with its destination and the 3rd with the board object.
+    Returns a boolean according to the case.'''
     # print(f"### source:{source} | destination:{destination} ###")
     can_attack = True
-    # Get piece name from pierce source:
+    self.squares = squares
+
+    # Get piece name from source:
     piece_name_source = PIECES_NAMES[source[2]]
 
     # Creating dict for passing to methods below:
@@ -186,7 +192,7 @@ class ChessRules():
 
     return valid_move
 
-  def _knight_attack(attack_data_dict):
+  def _knight_attack(self, attack_data_dict):
     '''Method that check if current attack is valid for the knight. It receives 1 dict argument and returns a boolean according to the case.'''
     valid_attack = True
 
@@ -313,17 +319,20 @@ class ChessBoard():
 
     # Checking received arguments:
     if source[0] not in ROWS and source[1] not in COLUMNS:
-      raise ValueError("An invalid starting position was received as an argument in ChessBoard.move_piece() method.")
+      status = False
+      message = "An invalid starting position was received as an argument."
 
-    if destination[0] not in ROWS and destination[1] not in COLUMNS:
-      raise ValueError("An invalid end position was received as an argument in ChessBoard.move_piece() method.")
+    elif destination[0] not in ROWS and destination[1] not in COLUMNS:
+      status = False
+      message = "An invalid end position was received as an argument."
 
-    # If the move is legal, change it. Otherwise do nothing.
-    # In both cases it ends by returning status boolean and a message.:
-    status, message = self._check_move(source, destination)
-    if status:
-      self._change_piece_position(source, destination)
-      self.moves += 1
+    else:
+      # If the move is legal, change it. Otherwise do nothing.
+      # In both cases it ends by returning status boolean and a message.:
+      status, message = self._check_move(source, destination)
+      if status:
+        self._change_piece_position(source, destination)
+        self.moves += 1
 
     return status, message
 
@@ -352,7 +361,7 @@ class ChessBoard():
 
         # 3a) Checking whether the piece can make a legal move:
         if len(destination_square) == 2:
-          if self.rules.check_move(source_square, destination_square):
+          if self.rules.check_move(source_square, destination_square, self.squares):
             status = True
             message = f"Moving {PIECES_NAMES[piece_source]} from {source_square[:2]} " \
                     + f"to {destination_square}."
@@ -362,7 +371,7 @@ class ChessBoard():
 
         # 2b) Checking if it is possible to attack an enemy piece in destination:
         elif len(destination_square) > 2:
-          if self.rules.check_attack(source_square, destination_square):
+          if self.rules.check_attack(source_square, destination_square, self.squares):
             initial_square = source_square[0:2]
             final_square = destination_square[0:2]
             attacked_piece = destination_square[2]
