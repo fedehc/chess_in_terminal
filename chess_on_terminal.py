@@ -5,6 +5,7 @@ import time
 from rich.console import Console
 from rich.table import Table
 from rich import box
+import numpy as np
 
 
 # Constants:
@@ -132,9 +133,45 @@ class ChessRules():
 
     return can_attack
 
-  def check_any_pieces_between(self, source, destinantion):
-    '''Method that checks if there is any pieces in a line (row, column, diagonal). It receives origin and destination string arguments and returns a boolean according to the case.'''
+  def check_any_pieces_between(self, row_source, col_source, row_destination, col_destination):
+    '''Method that checks if there is any pieces in a line (row, column, diagonal). It receives 4 int arguments and returns a boolean according to the case.'''
     piece_found = None
+
+    '''
+    # ROW movement:
+    if row_source == row_destination:
+      row_content = self.squares[row_source-1]  # Rest 1 because array starts from zero.
+      # Looping in row:
+      for col_number, square in enumerate(row_content):
+
+        # If the piece is moving from left to right...
+        if col_source < col_destination:
+          # The move is between col_source and col_destination...
+          if col_number >= col_source-1 and col_number <= col_destination:
+            # If square has more than 2 chars (square coordinates), then a piece is found:
+            if len(square) > 2:
+              piece_found = True
+
+        # If the piece is moving from right to left...
+        else:
+          # The move is between col_source and col_destination...
+          if col_number >= col_destination-1 and col_number <= col_source:
+            # If square has more than 2 chars (square coordinates), then a piece is found:
+            if len(square) > 2:
+              piece_found = True
+
+    # COLUMN movement:
+    elif col_source == col_destination:
+      # Looping in each row:
+      for col_num, row in enumerate(self.squares):
+        if col_num >= col_source-1 and col_num <= col_destination:
+          if len(row[col_source-1]) > 2:
+            piece_found = True
+
+    # If diagonal movement:
+    else:
+      pass
+    '''
 
     return piece_found
 
@@ -377,7 +414,7 @@ class ChessBoard():
             attacked_piece = destination_square[2]
 
             # 3b) Checking if the piece can perform a legal attack:
-            if self.rules.check_attack(source_square, destination_square):
+            if self.rules.check_attack(source_square, destination_square, self.squares):
               status = True
               message = f"Attacking with {PIECES_NAMES[piece_source]} from {initial_square} " \
                         f"to {PIECES_NAMES[attacked_piece]} in {final_square}."
