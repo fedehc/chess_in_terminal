@@ -1,4 +1,5 @@
 # Standard libraries:
+import json
 import os
 import time
 
@@ -10,6 +11,8 @@ import numpy
 
 
 # Constants:
+JSON_FILE = "moves.json"
+
 WHITES = "white"
 BLACKS = "black"
 WHITE = "w"
@@ -493,7 +496,7 @@ class ChessBoard():
 
 
 class Aux():
-  '''A class with auxiliary methods.'''
+  '''A class with useful methods.'''
   def get_rows_and_cols_from(self, source, destination):
     '''Method that gets and returns rows and cols strings from a source and destination string arguments.'''
     row_source = int(source[0])-1
@@ -509,6 +512,21 @@ class Aux():
     if os.name in ("nt", "dos"):  # If OS is running Windows, uses 'cls' command.
         command = "cls"
     os.system(command)
+
+  def get_moves_from_json_file(self, file):
+    '''Method that reads file containing an array of valid chess moves. Receives a string argument containg the file.
+    Returns an array with the file content (if any).'''
+    results = None
+    print(f"\nLeyendo datos del archivo '{file}'... 💾")
+
+    try:
+      with open(file, "r") as open_file:
+        results = json.load(open_file)
+    except Exception as e:
+      print(f"Error while reading {JSON_FILE}.")
+      print(f"Error message: {e}")
+    finally:
+      return results
 
 
 class UI():
@@ -655,32 +673,18 @@ class ChessGame():
     print("-"*55)
     print()
 
+  def _play_from_file(self, file):
+    '''Method that plays a chess game with moves fetched from a JSON file.'''
+    chess_moves = game.aux.get_moves_from_json_file(file)
+    if chess_moves:
+      for array_data in chess_moves:
+        game.move(*array_data)
 
 # Main:
 if __name__ == "__main__":
   game = ChessGame()
   game.start()
-
-  game.move("7b", "6b")
-  game.move("2b", "3b")
-
-  game.move("7c", "5c")
-  game.move("2c", "4c")
-
-  game.move("7d", "5d")
-  game.move("2d", "4d")
-
-  game.move("5d", "4c")
-  game.move("4d", "5c")
-
-  game.move("4c", "3b")
-  game.move("5c", "6b")
-
-  game.move("3b", "2a")
-  game.move("6b", "7a")
-
-  game.move("2a", "1b")
-  game.move("7a", "8b")
+  game._play_from_file(JSON_FILE)
 
   # print(f"{game._show_history()}")
   # print(f"\n# 1a: {game.board.squares[0, 0]}\n")
