@@ -382,8 +382,8 @@ class ChessBoard():
     self.squares[0, 0] = PIECES_CODE[ROOK] + BLACK
     self.squares[0, 1] = PIECES_CODE[KNIGHT] + BLACK
     self.squares[0, 2] = PIECES_CODE[BISHOP] + BLACK
-    self.squares[0, 3] = PIECES_CODE[KING] + BLACK
-    self.squares[0, 4] = PIECES_CODE[QUEEN] + BLACK
+    self.squares[0, 3] = PIECES_CODE[QUEEN] + BLACK
+    self.squares[0, 4] = PIECES_CODE[KING] + BLACK
     self.squares[0, 5] = PIECES_CODE[BISHOP] + BLACK
     self.squares[0, 6] = PIECES_CODE[KNIGHT] + BLACK
     self.squares[0, 7] = PIECES_CODE[ROOK] + BLACK
@@ -395,8 +395,8 @@ class ChessBoard():
     self.squares[7, 0] = PIECES_CODE[ROOK] + WHITE
     self.squares[7, 1] = PIECES_CODE[KNIGHT] + WHITE
     self.squares[7, 2] = PIECES_CODE[BISHOP] + WHITE
-    self.squares[7, 3] = PIECES_CODE[KING] + WHITE
-    self.squares[7, 4] = PIECES_CODE[QUEEN] + WHITE
+    self.squares[7, 3] = PIECES_CODE[QUEEN] + WHITE
+    self.squares[7, 4] = PIECES_CODE[KING] + WHITE
     self.squares[7, 5] = PIECES_CODE[BISHOP] + WHITE
     self.squares[7, 6] = PIECES_CODE[KNIGHT] + WHITE
     self.squares[7, 7] = PIECES_CODE[ROOK] + WHITE
@@ -673,5 +673,5 @@ if __name__ == "__main__":
   game.move("2a", "1b")
   game.move("7a", "8b")
 
-  print(f"{game._show_history()}")
+  # print(f"{game._show_history()}")
   # print(f"\n# 1a: {game.board.squares[0, 0]}\n")
