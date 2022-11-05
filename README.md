@@ -1,5 +1,5 @@
 # Chess On Terminal
-**[Work in progress]**
+**✨ Work in progress ✨**
 
 ## A simple game of chess to play on terminal console.
 ![Image](./images/screenshot.png)
