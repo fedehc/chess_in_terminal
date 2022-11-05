@@ -40,3 +40,5 @@ Made in Python and using Numpy and Rich libraries (the only third-party dependen
 - Run the [chess_on_terminal.py](chess_on_terminal.py) file:
 
     `(chess)> python3 chess_on_terminal.py`
+
+And that's it. 😃
