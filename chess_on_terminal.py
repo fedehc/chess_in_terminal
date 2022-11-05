@@ -154,42 +154,77 @@ class ChessRules():
   def check_any_pieces_between(self, row_source, col_source, row_destination, col_destination):
     '''Method that checks if there is any pieces in a line (row, column, diagonal). It receives 4 int arguments and returns a boolean according to the case.'''
     piece_found = None
+    array_move = None
+    squares = self.squares # Local copy required to avoid any array mutation.
 
-    '''
     # ROW movement:
     if row_source == row_destination:
-      row_content = self.squares[row_source-1]  # Rest 1 because array starts from zero.
-      # Looping in row:
-      for col_number, square in enumerate(row_content):
-
-        # If the piece is moving from left to right...
-        if col_source < col_destination:
-          # The move is between col_source and col_destination...
-          if col_number >= col_source-1 and col_number <= col_destination:
-            # If square has more than 2 chars (square coordinates), then a piece is found:
-            if len(square) > 2:
-              piece_found = True
-
-        # If the piece is moving from right to left...
-        else:
-          # The move is between col_source and col_destination...
-          if col_number >= col_destination-1 and col_number <= col_source:
-            # If square has more than 2 chars (square coordinates), then a piece is found:
-            if len(square) > 2:
-              piece_found = True
+      # Get only the cols in which the piece moves in the row:
+      array_move = squares[row_source, col_source:col_destination]
 
     # COLUMN movement:
     elif col_source == col_destination:
-      # Looping in each row:
-      for col_num, row in enumerate(self.squares):
-        if col_num >= col_source-1 and col_num <= col_destination:
-          if len(row[col_source-1]) > 2:
-            piece_found = True
+      # Get only the rows in which the piece moves in the col:
+      array_move = squares[row_source:row_destination, col_source]
 
-    # If diagonal movement:
+    # DIAGONAL movement:
     else:
-      pass
-    '''
+      # Check if "normal" numpy diagonal direction kind:
+      if row_destination > row_source and col_destination > col_source or \
+         row_destination < row_source and col_destination < col_source:
+        pass
+
+      # If "inverted" numpy diagonal direction kind:
+      else:
+        # Invert and compensate row and cols values:
+        squares = numpy.rot90(squares)
+        old_col_source = col_source
+        old_col_destination = col_destination
+        col_source = row_source
+        col_destination = row_destination
+        row_source = (TOTAL_ROWS-1) - old_col_source
+        row_destination = (TOTAL_COLS-1) - old_col_destination
+
+      print(f"\n{squares}\n")
+      
+      # Get diagonal offset from squares source:
+      offset = col_source - row_source
+
+      # Create array based on source-destination relative locations:
+      col_offset = 0
+      if col_destination > col_source:
+
+        # Create column offset:
+        if row_destination > row_source:
+            if offset > 0:
+                col_offset = offset
+        else:
+            if offset < 0:
+                col_offset = offset
+        # print(f"offset: {offset} | col_offset: {col_offset}")
+        # Get only the rows in which the piece moves in the diagonal (including source and dest.):
+        array_move = squares.diagonal(offset)[col_source-col_offset:col_destination+1]
+
+      else:
+        # Create column offset:
+        if row_destination > row_source:
+            if offset > 0:
+                col_offset = offset
+        else:
+            if offset < 0:
+                col_offset = offset
+
+        # Get only the rows in which the piece moves in the diagonal (including source and dest.):
+        array_move = squares.diagonal(offset)[col_destination-col_offset:col_source+1]
+
+    array_move = array_move.tolist()
+    # print(array_move)
+    results = [x for x in array_move if x != '']
+    # print(f"{results}\n")
+    if len(results) > 1: # More than 2 because source piece is included in results.
+      piece_found = True
+    else:
+      piece_found = False
 
     return piece_found
 
