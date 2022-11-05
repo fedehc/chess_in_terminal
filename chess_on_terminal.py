@@ -1,4 +1,5 @@
 # Standard libraries:
+import os
 import time
 
 # 3° libraries:
@@ -494,13 +495,20 @@ class ChessBoard():
 class Aux():
   '''A class with auxiliary methods.'''
   def get_rows_and_cols_from(self, source, destination):
-    '''Function that gets and returns rows and cols strings from a source and destination string arguments.'''
+    '''Method that gets and returns rows and cols strings from a source and destination string arguments.'''
     row_source = int(source[0])-1
     col_source = COL_NUMBER_IN_ARRAY[source[1]]
     row_destination = int(destination[0])-1
     col_destination = COL_NUMBER_IN_ARRAY[destination[1]]
 
     return row_source, col_source, row_destination, col_destination
+
+  def clear_terminal_console(self):
+    '''Method that clears any text from the terminal console.'''
+    command = "clear"
+    if os.name in ("nt", "dos"):  # If OS is running Windows, uses 'cls' command.
+        command = "cls"
+    os.system(command)
 
 
 class UI():
@@ -604,6 +612,7 @@ class ChessGame():
 
     # If the piece was moved successfully, show move on terminal and end turn:
     if status:
+      self.aux.clear_terminal_console()
       self.ui.show_pieces(self.board, self.players)
       self._save_last_move(source, destination)
       self._finish_turn(source, destination)
