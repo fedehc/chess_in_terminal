@@ -4,9 +4,9 @@
 ## A simple game of chess to play on terminal console.
 ![Image](./images/screenshot.png)
 ### Description:
-Yes, as it says above: another chess game to play on any terminal console. 😌
+Yep, as it says above: another chess game to play on any terminal console. 😌
 
-Made in Python and using only Numpy and Rich libraries (the only dependencies needed to run the script).
+Made in Python and using Numpy and Rich libraries (the only third-party dependencies needed to run the script).
 
 ### Installation:
 1) If you don't already have it, install the latest version of Python from the [oficial website](https://www.python.org/downloads/).
