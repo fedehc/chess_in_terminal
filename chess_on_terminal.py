@@ -550,7 +550,7 @@ class ChessGame():
   def start(self):
     '''A method that starts a chess game by resetting the pieces on the board to their initial positions, taking the initial time and finally displaying the board on the terminal.'''
     self.board.reset_chess_pieces()
-    self.players.history.append(["Game start", "---", time.ctime()])
+    self.players.history.append(["Start", "--------------", time.ctime()])
     self.ui.show_pieces(self.board, self.players)
     time.sleep(1.5)
 
@@ -570,6 +570,7 @@ class ChessGame():
     # If the piece was moved successfully, show move on terminal and end turn:
     if status:
       self.ui.show_pieces(self.board, self.players)
+      self._save_last_move(source, destination)
       self._finish_turn(source, destination)
 
     # Otherwise, show error:
@@ -577,9 +578,18 @@ class ChessGame():
       raise ValueError(message)
 
   def _finish_turn(self, source, destination):
-    '''Method that records last move and time, and assigns new turn for the other player.'''
+    '''Simple method that assigns new turn for the other player in internal string.'''
+    # Change player turn and wait a few seconds:
+    if self.players.turn == WHITES:
+      self.players.turn = BLACKS
+    else:
+      self.players.turn = WHITES
+    time.sleep(1.5)
+
+  def _save_last_move(self, source, destination):
+    '''Method that saves last move in history array. Receives 2 strings arguments.'''
     # Get rows and cols numbers from source and destination:
-    row_source, col_source, row_destination, col_destination = self.aux.get_rows_and_cols_from(source, destination)
+    _, _, row_destination, col_destination = self.aux.get_rows_and_cols_from(source, destination)
 
     # Get current source piece:
     square = self.board.squares[row_destination, col_destination]
@@ -590,12 +600,16 @@ class ChessGame():
                                  f"{piece}: {source} -> {destination}",
                                  time.ctime()])
 
-    # Change player turn and wait a few seconds:
-    if self.players.turn == WHITES:
-      self.players.turn = BLACKS
-    else:
-      self.players.turn = WHITES
-    time.sleep(1.5)
+  def _show_history(self):
+    '''Internal method only used for showin self.players.history array content.'''
+    print()
+    print("-"*55)
+    print("# History:")
+    print("-"*55)
+    for row in self.players.history:
+      print(row)
+    print("-"*55)
+    print()
 
 
 # Main:
@@ -624,5 +638,5 @@ if __name__ == "__main__":
   game.move("2a", "1b")
   game.move("7a", "8b")
 
-  #print(f"\n{game.players.history}\n")
-  #print(f"\n# 5c: {game.board.squares[4][2]}\n")
+  print(f"{game._show_history()}")
+  # print(f"\n# 1a: {game.board.squares[0, 0]}\n")
