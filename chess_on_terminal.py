@@ -477,7 +477,7 @@ class ChessBoard():
 
         if self.rules.check_attack(source, destination, self.squares):
           status = True
-          message = f"Attacking with {color_source} {piece_source} from {source} " \
+          message = f"Attacking w/{color_source} {piece_source} from {source} " \
                       f"to {color_destination} {piece_destination} on {destination}."
         else:
           status = False
@@ -575,7 +575,7 @@ class TUI(UI):
       else:
         table_title = f" [{STYLE_BLACK}]{board.moves}) {players.turn.title()}'s move:[/{STYLE_BLACK}]\n {message}"
     else:
-      table_title = f" [{STYLE_1}]Starting new game:[/{STYLE_1}]"
+      table_title = f" [{STYLE_1}]¡Starting a new game![/{STYLE_1}]"
 
     # Creating table:
     table = Table(title=table_title,
