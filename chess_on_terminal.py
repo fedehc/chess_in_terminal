@@ -530,6 +530,19 @@ class Aux():
     finally:
       return results
 
+  def pause_and_wait_for_enter_key(self, ui):
+    '''Method that waits for a ENTER key from user. Receives a ui object as argument for showing text in terminal console.'''
+    ui._show_text(text="Press ENTER to continue...", text_type=NORMAL_TYPE)
+    try:
+      # Wait for ENTER key to continue:
+      input()
+    # If CTRL + C keys pressed during input, abort script and exit game.
+    except KeyboardInterrupt:
+      print()
+      ui._show_text(text="CTRL + C pressed, abort game.", text_type=NORMAL_TYPE)
+      print()
+      sys.exit(0)
+
 
 class UI():
   '''A class uses as (informal) interface for any other UI type classes.'''
