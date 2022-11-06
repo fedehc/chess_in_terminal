@@ -685,6 +685,39 @@ class ChessGame():
     else:
       self.ui._show_text(text=message, text_type=ERROR_TYPE)
 
+  def play_from_file(self, file):
+    '''Method that plays a chess game with moves fetched from a JSON file.'''
+    # Clear terminal console and show initial message:
+    self.aux.clear_terminal_console()
+    message = f"Reading chess moves from file '{file}... 💾"
+    self.ui._show_text(text=message, justify="left")
+
+    # Get moves from JSON file:
+    chess_moves = game.aux.get_moves_from_json_file(file)
+
+    # If successful...
+    if chess_moves:
+      # Show message:
+      print()
+      message = "JSON file ok, chess moves obtained."
+      self.ui._show_text(message, justify="left")
+
+      # Wait for ENTER key from user:
+      print("\n\n")
+      self.aux.pause_and_wait_for_enter_key(self.ui)
+
+      # Start new game:
+      self.start()
+
+      # And play the moves:
+      for data_move_array in chess_moves:
+        game.move(*data_move_array)
+
+    # If unsuccessful, show error message on terminal console:
+    else:
+      message = f"Cant open JSON file and play moves, aborting."
+      self.ui._show_text(text=message, text_type=ERROR_TYPE)
+
   def _finish_turn(self):
     '''Simple method that assigns new turn for the other player in internal string.'''
     # Change player turn and wait a few seconds:
@@ -722,39 +755,6 @@ class ChessGame():
 
     print("-"*TABLE_WIDTH)
     print()
-
-  def _play_from_file(self, file):
-    '''Method that plays a chess game with moves fetched from a JSON file.'''
-    # Clear terminal console and show initial message:
-    self.aux.clear_terminal_console()
-    message = f"Reading chess moves from file '{file}... 💾"
-    self.ui._show_text(text=message, justify="left")
-
-    # Get moves from JSON file:
-    chess_moves = game.aux.get_moves_from_json_file(file)
-
-    # If successful...
-    if chess_moves:
-      # Show message:
-      print()
-      message = "JSON file ok, chess moves obtained."
-      self.ui._show_text(message, justify="left")
-
-      # Wait for ENTER key from user:
-      print("\n\n")
-      self.aux.pause_and_wait_for_enter_key(self.ui)
-
-      # Start new game:
-      self.start()
-
-      # And play the moves:
-      for data_move_array in chess_moves:
-        game.move(*data_move_array)
-
-    # If unsuccessful, show error message on terminal console:
-    else:
-      message = f"Cant open JSON file and play moves, aborting."
-      self.ui._show_text(text=message, text_type=ERROR_TYPE)
 
 
 # Main:
