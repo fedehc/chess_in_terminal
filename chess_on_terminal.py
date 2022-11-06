@@ -653,10 +653,11 @@ class ChessGame():
 
   def start(self):
     '''A method that starts a chess game by resetting the pieces on the board to their initial positions, taking the initial time and finally displaying the board on the terminal.'''
+    self.aux.clear_terminal_console()
     self.board.reset_chess_pieces()
     self.players.history.append(["Start", "--------------", time.ctime()])
     self.ui.show_pieces(self.board, self.players)
-    time.sleep(1.5)
+    self.aux.pause_and_wait_for_enter_key(self.ui)
 
   def move(self, source, destination):
     '''Method that moves a chess part from its source to its destination, both received by argument.
@@ -676,22 +677,23 @@ class ChessGame():
     # If the piece was moved successfully, show move on terminal and end turn:
     if status:
       self.aux.clear_terminal_console()
-      self.ui.show_pieces(self.board, self.players)
+      self.ui.show_pieces(self.board, self.players, message)
       self._save_last_move(source, destination)
-      self._finish_turn(source, destination)
+      self._finish_turn()
 
     # Otherwise, show error:
     else:
       self.ui._show_text(text=message, text_type=ERROR_TYPE)
 
-  def _finish_turn(self, source, destination):
+  def _finish_turn(self):
     '''Simple method that assigns new turn for the other player in internal string.'''
     # Change player turn and wait a few seconds:
     if self.players.turn == WHITES:
       self.players.turn = BLACKS
     else:
       self.players.turn = WHITES
-    time.sleep(1.5)
+
+    self.aux.pause_and_wait_for_enter_key(self.ui)
 
   def _save_last_move(self, source, destination):
     '''Method that saves last move in history array. Receives 2 strings arguments.'''
@@ -710,35 +712,46 @@ class ChessGame():
   def _show_history(self):
     '''Internal method only used for showin self.players.history array content.'''
     print()
-    print("-"*55)
+    print("-"*TABLE_WIDTH)
     print("# History:")
-    print("-"*55)
+    print("-"*TABLE_WIDTH)
+
+    # Print every row from history array:
     for row in self.players.history:
       print(row)
-    print("-"*55)
+
+    print("-"*TABLE_WIDTH)
     print()
 
   def _play_from_file(self, file):
     '''Method that plays a chess game with moves fetched from a JSON file.'''
-    # Create and show initial message:
-    message = f"Reading chess moves from file '{file}'... 💾"
-    self.ui._show_text(text=message)
+    # Clear terminal console and show initial message:
+    self.aux.clear_terminal_console()
+    message = f"Reading chess moves from file '{file}... 💾"
+    self.ui._show_text(text=message, justify="left")
 
     # Get moves from JSON file:
     chess_moves = game.aux.get_moves_from_json_file(file)
 
-    # If successful, then the game is started and those moves are played:
+    # If successful...
     if chess_moves:
-      message = f"JSON file ok and chess moves obtained. Starting game..."
-      self.ui._show_text(text=message)
+      # Show message:
+      print()
+      message = "JSON file ok, chess moves obtained."
+      self.ui._show_text(message, justify="left")
 
-      # Start game:
+      # Wait for ENTER key from user:
+      print("\n\n")
+      self.aux.pause_and_wait_for_enter_key(self.ui)
+
+      # Start new game:
       self.start()
 
-      # Play moves:
+      # And play the moves:
       for data_move_array in chess_moves:
         game.move(*data_move_array)
 
+    # If unsuccessful, show error message on terminal console:
     else:
       message = f"Cant open JSON file and play moves, aborting."
       self.ui._show_text(text=message, text_type=ERROR_TYPE)
