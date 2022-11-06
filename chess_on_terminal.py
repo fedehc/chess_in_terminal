@@ -35,6 +35,9 @@ COL_NUMBER_IN_ARRAY = {'a': 0, 'b': 1, 'c': 2, 'd': 3, 'e': 4, 'f': 5, 'g': 6, '
 SECOND_ROW = 1
 SEVENTH_ROW = 6
 
+NORMAL_TYPE = "normal_type"
+ERROR_TYPE = "error_type"
+
 
 # Classes:
 class ChessPlayers():
@@ -101,7 +104,7 @@ class ChessRules():
     elif piece_source == PAWN:
       can_move = self._pawn_move(move_data_dict)
     else:
-      raise ValueError("Invalid piece_name inside check_move method in ChessRules class.")
+      pass
 
     return can_move
 
@@ -151,7 +154,7 @@ class ChessRules():
     elif piece_source == PAWN:
       can_attack = self._pawn_attack(attack_data_dict)
     else:
-      raise ValueError("Invalid piece_name_source inside check_attack in ChessRules class.")
+      pass
 
     return can_attack
 
@@ -517,14 +520,13 @@ class Aux():
     '''Method that reads file containing an array of valid chess moves. Receives a string argument containg the file.
     Returns an array with the file content (if any).'''
     results = None
-    print(f"\nLeyendo datos del archivo '{file}'... 💾")
-
+    
     try:
       with open(file, "r") as open_file:
         results = json.load(open_file)
-    except Exception as e:
+    except Exception as error:
       print(f"Error while reading {JSON_FILE}.")
-      print(f"Error message: {e}")
+      print(f"Error message: {error}")
     finally:
       return results
 
@@ -599,6 +601,13 @@ class TUI(UI):
 
     return new_row
 
+  def _show_text(self, text, text_type=NORMAL_TYPE):
+    '''Method that displays on terminal console a text received as argument.'''
+    if text_type == NORMAL_TYPE:
+      self.console.print(f" {text} \n", style="grey7 on white bold")
+    else:
+      self.console.print(f" {text} \n", style="red on white bold")
+
 
 class ChessGame():
   '''The class that uses all the others classes to run the game.'''
@@ -620,10 +629,12 @@ class ChessGame():
     This method calls another method from ChessBoard class to complete the task.'''
     # Checking source and destination values:
     if len(source) == 0 or len(source) > 2:
-      raise ValueError("Invalid source value.")
+      message=f"Invalid source value: {source}."
+      self.ui._show_text(text=message, text_type=ERROR_TYPE)
 
     if len(destination) == 0 or len(destination) > 2:
-      raise ValueError("Invalid destination value.")
+      message=f"Invalid destination value: {destination}."
+      self.ui._show_text(text=message, text_type=ERROR_TYPE)
 
     # Move piece to destination:
     status, message = self.board.move_piece(source, destination)
@@ -637,7 +648,7 @@ class ChessGame():
 
     # Otherwise, show error:
     else:
-      raise ValueError(message)
+      self.ui._show_text(text=message, text_type=ERROR_TYPE)
 
   def _finish_turn(self, source, destination):
     '''Simple method that assigns new turn for the other player in internal string.'''
@@ -675,16 +686,35 @@ class ChessGame():
 
   def _play_from_file(self, file):
     '''Method that plays a chess game with moves fetched from a JSON file.'''
+    # Create and show initial message:
+    message = f"Reading chess moves from file '{file}'... 💾"
+    self.ui._show_text(text=message)
+
+    # Get moves from JSON file:
     chess_moves = game.aux.get_moves_from_json_file(file)
+
+    # If successful, then the game is started and those moves are played:
     if chess_moves:
-      for array_data in chess_moves:
-        game.move(*array_data)
+      message = f"JSON file ok and chess moves obtained. Starting game..."
+      self.ui._show_text(text=message)
+
+      # Start game:
+      self.start()
+
+      # Play moves:
+      for data_move_array in chess_moves:
+        game.move(*data_move_array)
+
+    else:
+      message = f"Cant open JSON file and play moves, aborting."
+      self.ui._show_text(text=message, text_type=ERROR_TYPE)
+
 
 # Main:
 if __name__ == "__main__":
   game = ChessGame()
-  game.start()
   game._play_from_file(JSON_FILE)
+  # game.start()
 
   # print(f"{game._show_history()}")
   # print(f"\n# 1a: {game.board.squares[0, 0]}\n")
