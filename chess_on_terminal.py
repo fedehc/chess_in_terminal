@@ -602,7 +602,7 @@ class TUI(UI):
       row_board = self._format_square_according_to_color_piece(row_board)
 
       # Adding a last column of board numbers to each row in array:
-      row_board.append(str(ROWS[row_number-1]))
+      row_board.append(f" {str(ROWS[row_number-1])} ")
 
       # Adding each row to table:
       table.add_row(*row_board)   # Passing as strings (not full list).
