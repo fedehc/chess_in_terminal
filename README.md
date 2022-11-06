@@ -1,12 +1,13 @@
 # Chess On Terminal
 **✨ Work in progress ✨**
 
-## A simple game of chess to play on terminal console.
+## A simple chess game to play from the terminal console.
 ![Image](./images/screenshot.png)
 ### Description:
-Yep, as it says above: another chess game to play on any terminal console. 😌
+I needed to refresh my Python knowledge.
+And what better than making a chess game to play from the terminal console? 😁
 
-Made in Python and using Numpy and Rich libraries (the only third-party dependencies needed to run the script).
+Yes, made in Python and only using Numpy and Rich as third-party libraries (the only dependencies needed to run the script).
 
 ### Installation:
 1) If you don't already have it, install the latest version of Python from the [oficial website](https://www.python.org/downloads/).
