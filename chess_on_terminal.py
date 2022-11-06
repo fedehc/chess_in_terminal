@@ -534,7 +534,7 @@ class Aux():
         results = json.load(open_file)
     except Exception as error:
       print(f"Error while reading {JSON_FILE}.")
-      print(f"Error message: {error}")
+      print(f"Message: {error}")
     finally:
       return results
 
@@ -547,7 +547,7 @@ class Aux():
     # If CTRL + C keys pressed during input, abort script and exit game.
     except KeyboardInterrupt:
       print()
-      ui._show_text(text="CTRL + C pressed, abort game.", text_type=NORMAL_TYPE)
+      ui._show_text(text="CTRL + C pressed, aborting game.", text_type=NORMAL_TYPE)
       print()
       sys.exit(0)
 
@@ -699,7 +699,7 @@ class ChessGame():
     if chess_moves:
       # Show message:
       print()
-      message = "JSON file ok, chess moves obtained."
+      message = "JSON ok, list of chess moves fetched. ✅"
       self.ui._show_text(message, justify="left")
 
       # Wait for ENTER key from user:
