@@ -478,7 +478,7 @@ class ChessBoard():
         if self.rules.check_attack(source, destination, self.squares):
           status = True
           message = f"Attacking with {color_source} {piece_source} from {source} " \
-                      f"to {color_destination} final_square{piece_destination} in {destination}."
+                      f"to {color_destination} {piece_destination} on {destination}."
         else:
           status = False
           message = "This attack is not legal for this piece."
