@@ -760,7 +760,7 @@ class ChessGame():
 # Main:
 if __name__ == "__main__":
   game = ChessGame()
-  game._play_from_file(JSON_FILE)
+  game.play_from_file(JSON_FILE)
   # game.start()
 
   # print(f"{game._show_history()}")
