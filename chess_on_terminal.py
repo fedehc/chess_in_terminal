@@ -1,11 +1,13 @@
 # Standard libraries:
 import json
 import os
+import sys
 import time
 
 # 3° libraries:
 from rich.console import Console
 from rich.table import Table
+from rich.padding import Padding
 from rich import box
 import numpy
 
@@ -34,9 +36,15 @@ COLS = ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h')
 COL_NUMBER_IN_ARRAY = {'a': 0, 'b': 1, 'c': 2, 'd': 3, 'e': 4, 'f': 5, 'g': 6, 'h': 7}
 SECOND_ROW = 1
 SEVENTH_ROW = 6
+TABLE_WIDTH = 55
 
 NORMAL_TYPE = "normal_type"
 ERROR_TYPE = "error_type"
+
+STYLE_1 = "bold italic white"
+STYLE_ERROR = "red on white bold"
+STYLE_WHITE = "black on white bold"
+STYLE_BLACK = "white on black bold"
 
 
 # Classes:
@@ -556,30 +564,37 @@ class TUI(UI):
   def __init__(self):
     self.console = Console(color_system="256")
 
-  def show_pieces(self, board, players):
+  def show_pieces(self, board, players, message=""):
     '''Method that creates a table (using Rich library) according to the position of the pieces on the board (from internal array of the class).
     And then the content of this table is printed on the terminal.'''
-    # Table title:
+    # Create and style the title of the table according to the player's turn:
     table_title = ""
     if board.moves > 0:
-      table_title = f"{board.moves}) {players.turn.title()}'s move:"
+      if players.turn == WHITES:
+        table_title = f" [{STYLE_WHITE}]{board.moves}) {players.turn.title()}'s move:[/{STYLE_WHITE}]\n {message}"
+      else:
+        table_title = f" [{STYLE_BLACK}]{board.moves}) {players.turn.title()}'s move:[/{STYLE_BLACK}]\n {message}"
     else:
-      table_title = f"New game:"
+      table_title = f" [{STYLE_1}]Starting new game:[/{STYLE_1}]"
 
-    # Table:
-    table = Table(title=table_title, show_header=True, show_lines=True, box=box.ROUNDED)
+    # Creating table:
+    table = Table(title=table_title,
+                  title_justify="left",
+                  show_header=True,
+                  show_lines=True,
+                  show_edge=True,
+                  box=box.ROUNDED)
 
-    style = "italic not bold grey11"
     # Set 9 columns (8 plus 1 for board letters):
-    table.add_column(f"[{style}]a[/{style}]", justify="center", style="black", no_wrap=True)
-    table.add_column(f"[{style}]b[/{style}]", justify="center", style="black", no_wrap=True)
-    table.add_column(f"[{style}]c[/{style}]", justify="center", style="black", no_wrap=True)
-    table.add_column(f"[{style}]d[/{style}]", justify="center", style="black", no_wrap=True)
-    table.add_column(f"[{style}]e[/{style}]", justify="center", style="black", no_wrap=True)
-    table.add_column(f"[{style}]f[/{style}]", justify="center", style="black", no_wrap=True)
-    table.add_column(f"[{style}]g[/{style}]", justify="center", style="black", no_wrap=True)
-    table.add_column(f"[{style}]h[/{style}]", justify="center", style="black", no_wrap=True)
-    table.add_column(" ", justify="center", style=style, no_wrap=True)
+    table.add_column(f"[{STYLE_1}]a[/{STYLE_1}]", justify="center", style="black", no_wrap=True)
+    table.add_column(f"[{STYLE_1}]b[/{STYLE_1}]", justify="center", style="black", no_wrap=True)
+    table.add_column(f"[{STYLE_1}]c[/{STYLE_1}]", justify="center", style="black", no_wrap=True)
+    table.add_column(f"[{STYLE_1}]d[/{STYLE_1}]", justify="center", style="black", no_wrap=True)
+    table.add_column(f"[{STYLE_1}]e[/{STYLE_1}]", justify="center", style="black", no_wrap=True)
+    table.add_column(f"[{STYLE_1}]f[/{STYLE_1}]", justify="center", style="black", no_wrap=True)
+    table.add_column(f"[{STYLE_1}]g[/{STYLE_1}]", justify="center", style="black", no_wrap=True)
+    table.add_column(f"[{STYLE_1}]h[/{STYLE_1}]", justify="center", style="black", no_wrap=True)
+    table.add_column(" ", justify="center", style=STYLE_1, no_wrap=True)
 
     # Set the 8 rows with the current pieces:
     for row_number, row_board in enumerate(board.squares, 1):
@@ -594,7 +609,7 @@ class TUI(UI):
 
     # Show table in terminal:
     print()
-    self.console.print(table)
+    self.console.print(Padding(table, 1))
 
   def _format_square_according_to_color_piece(self, row):
     '''Method that receives an array as argument and returns it modified based on its content.'''
@@ -614,12 +629,18 @@ class TUI(UI):
 
     return new_row
 
-  def _show_text(self, text, text_type=NORMAL_TYPE):
+  def _show_text(self, text, text_type=NORMAL_TYPE, style=STYLE_1, justify="center", width=TABLE_WIDTH):
     '''Method that displays on terminal console a text received as argument.'''
     if text_type == NORMAL_TYPE:
-      self.console.print(f" {text} \n", style="grey7 on white bold")
+      self.console.print(f" {text} ",
+                         style=style,
+                         justify=justify,
+                         width=width)
     else:
-      self.console.print(f" {text} \n", style="red on white bold")
+      self.console.print(f" {text} ",
+                         style=STYLE_ERROR,
+                         justify=justify,
+                         width=width)
 
 
 class ChessGame():
