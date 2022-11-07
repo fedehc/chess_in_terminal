@@ -68,7 +68,7 @@ class ChessPlayers():
 
 
 class ChessRules():
-  '''The class that contains the rules with all the legal moves of the pieces within the board..'''
+  '''The class that contains the rules with all the legal moves and attacks of all the chess pieces...'''
   def __init__(self):
     self.squares = None
     self.aux = Aux()
@@ -392,7 +392,7 @@ class ChessBoard():
     self.rules = ChessRules()
     self.aux = Aux()
 
-  def reset_chess_pieces(self):
+  def reset_chess(self):
     '''Method that sets up the chess pieces with the initial chess positions to start a game.'''
     # Blacks:
     self.squares[0, 0] = PIECES_CODE[ROOK] + BLACK
@@ -434,14 +434,14 @@ class ChessBoard():
 
     else:
       # If the move or attack is legal, do it:
-      status, message = self._check_move(source, destination)
+      status, message = self._check_if_move_is_legal(source, destination)
       if status:
         self._change_piece_position(source, destination)
         self.moves += 1
 
     return status, message
 
-  def _check_move(self, source, destination):
+  def _check_if_move_is_legal(self, source, destination):
     '''Method that checks if the desired move of a piece is legal. It receives 2 arguments, one with the source of a piece and the other with its destination.
     Calls other methods to check if the move or attack is legal. Returns tuple of data according to the case.'''
     status = None
@@ -662,7 +662,7 @@ class ChessGame():
   def start(self):
     '''A method that starts a chess game by resetting the pieces on the board to their initial positions, taking the initial time and finally displaying the board on the terminal.'''
     self.aux.clear_terminal_console()
-    self.board.reset_chess_pieces()
+    self.board.reset_chess()
     self.players.history.append(["Start", "--------------", time.ctime()])
     self.ui.show_pieces(self.board, self.players)
     self.aux.pause_and_wait_for_enter_key(self.ui)
