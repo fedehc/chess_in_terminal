@@ -1,4 +1,4 @@
-# chess_on_terminal
+# chess_in_terminal
 **✨✨ Work in progress ✨✨**
 
 ## A simple chess game to play from the terminal console.
