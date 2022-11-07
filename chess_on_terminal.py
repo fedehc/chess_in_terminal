@@ -6,8 +6,9 @@ import time
 
 # 3° libraries:
 from rich.console import Console
-from rich.table import Table
 from rich.padding import Padding
+from rich.panel import Panel
+from rich.table import Table
 from rich import box
 import numpy
 
@@ -629,13 +630,20 @@ class TUI(UI):
 
     return new_row
 
-  def _show_text(self, text, text_type=NORMAL_TYPE, style=STYLE_1, justify="center", width=TABLE_WIDTH):
+  def _show_text(self, text, text_type=NORMAL_TYPE, style=STYLE_1,
+                 justify="center", width=TABLE_WIDTH, panel=False):
     '''Method that displays on terminal console a text received as argument.'''
     if text_type == NORMAL_TYPE:
-      self.console.print(f" {text} ",
-                         style=style,
-                         justify=justify,
-                         width=width)
+      if not panel:
+        self.console.print(f" {text} ",
+                           style=style,
+                           justify=justify,
+                           width=width)
+      else:
+        self.console.print(Panel(f" {text} "),
+                           style=style,
+                           justify=justify,
+                           width=width)
     else:
       self.console.print(f" {text} ",
                          style=STYLE_ERROR,
@@ -690,7 +698,7 @@ class ChessGame():
     # Clear terminal console and show initial message:
     self.aux.clear_terminal_console()
     message = f"Reading chess moves from file '{file}... 💾"
-    self.ui._show_text(text=message, justify="left")
+    self.ui._show_text(text=message, justify="left", panel=True)
 
     # Get moves from JSON file:
     chess_moves = game.aux.get_moves_from_json_file(file)
@@ -699,8 +707,8 @@ class ChessGame():
     if chess_moves:
       # Show message:
       print()
-      message = "JSON ok, list of chess moves fetched. ✅"
-      self.ui._show_text(message, justify="left")
+      message = "JSON file ok and list of chess moves fetched. ✅"
+      self.ui._show_text(message, justify="left", panel=True)
 
       # Wait for ENTER key from user:
       print("\n\n")
