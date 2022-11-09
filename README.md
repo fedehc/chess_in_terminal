@@ -2,7 +2,8 @@
 **✨✨ Work in progress ✨✨**
 
 ## A simple chess game to play from the terminal console.
-![Image](./images/screenshot.png)
+![Screenshot1](./images/screenshot1.png)
+![Screenshot2](./images/screenshot2.png)
 ### Description:
 I needed to refresh my Python knowledge.
 And what better than making a chess game... to play from the terminal console? 😁
