@@ -702,6 +702,8 @@ Please select an option:
     elif selected_option == OPTION_THREE:
       self.ui.console.print("\nGoodbye! 👋\n")
       sys.exit(0)
+    else:
+      pass
 
   def start_new_game(self):
     '''A method that starts a chess game by resetting the pieces on the board to their initial positions, taking the initial time and finally displaying the board on the terminal.'''
