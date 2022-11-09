@@ -15,6 +15,10 @@ import numpy
 
 # Constants:
 JSON_FILE = "moves.json"
+OPTION_ONE = '1'
+OPTION_TWO = '2'
+OPTION_THREE = '3'
+VALID_OPTIONS = (OPTION_ONE, OPTION_TWO, OPTION_THREE)
 
 WHITES = "white"
 BLACKS = "black"
