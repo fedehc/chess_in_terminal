@@ -664,13 +664,48 @@ class ChessGame():
     self.ui = TUI()
     self.aux = Aux()
 
-  def start(self):
+  def show_menu(self):
+    '''Method that shows in terminal a inital menu with all actions in the game.'''
+    selected_option = None
+
+    menu = Padding(Panel('''
+[b]chess_in_terminal[/b]
+[i]by FedeHC - 2022[/i]
+
+
+
+Please select an option:
+
+
+[b]1)[/b] Start new game
+
+[b]2)[/b] Load saved game from file
+
+[b]3)[/b] Exit
+
+    ''', width=TABLE_WIDTH))
+    # Clear screen and show menu:
+    while selected_option not in VALID_OPTIONS:
+      self.aux.clear_terminal_console()
+      self.ui.console.print(Padding(menu, 1, style="white"))
+      selected_option = input("> ")
+
+    # Get input from user:
+    if selected_option == OPTION_ONE:
+      self.start_new_game()
+    elif selected_option == OPTION_TWO:
+      self.play_from_file(file=JSON_FILE)
+    elif selected_option == OPTION_THREE:
+      self.ui.console.print("\nGoodbye! 👋\n")
+      sys.exit(0)
+
+  def start_new_game(self):
     '''A method that starts a chess game by resetting the pieces on the board to their initial positions, taking the initial time and finally displaying the board on the terminal.'''
     self.aux.clear_terminal_console()
     self.board.reset_chess()
     self.players.history.append(["Start", "--------------", time.ctime()])
     self.ui.show_pieces(self.board, self.players)
-    self.aux.pause_and_wait_for_enter_key(self.ui)
+    self.aux.pause_and_wait_for_key(self.ui)
 
   def move(self, source, destination):
     '''Method that moves a chess part from its source to its destination, both received by argument.
@@ -717,10 +752,10 @@ class ChessGame():
 
       # Wait for ENTER key from user:
       print("\n\n")
-      self.aux.pause_and_wait_for_enter_key(self.ui)
+      self.aux.pause_and_wait_for_key(self.ui)
 
       # Start new game:
-      self.start()
+      self.start_new_game()
 
       # And play the moves:
       for data_move_array in chess_moves:
@@ -739,7 +774,7 @@ class ChessGame():
     else:
       self.players.turn = WHITES
 
-    self.aux.pause_and_wait_for_enter_key(self.ui)
+    self.aux.pause_and_wait_for_key(self.ui)
 
   def _save_last_move(self, source, destination):
     '''Method that saves last move in history array. Receives 2 strings arguments.'''
@@ -773,8 +808,8 @@ class ChessGame():
 # Main:
 if __name__ == "__main__":
   game = ChessGame()
-  game.play_from_file(JSON_FILE)
-  # game.start()
+  game.show_menu()
+
 
   # print(f"{game._show_history()}")
   # print(f"\n# 1a: {game.board.squares[0, 0]}\n")
