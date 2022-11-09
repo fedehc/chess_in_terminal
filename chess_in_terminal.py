@@ -539,12 +539,17 @@ class Aux():
     finally:
       return results
 
-  def pause_and_wait_for_enter_key(self, ui):
-    '''Method that waits for a ENTER key from user. Receives a ui object as argument for showing text in terminal console.'''
-    ui._show_text(text="Press ENTER to continue...", text_type=NORMAL_TYPE)
+  def pause_and_wait_for_key(self, ui):
+    '''Method that waits for a any key from user. Receives a ui object as argument for showing text in terminal console.'''
+    key = None
+    # Show message:
+    ui._show_text(text="Press ANY key to continue...", text_type=NORMAL_TYPE)
+
     try:
       # Wait for ENTER key to continue:
-      input()
+      while key == None:
+        key = input("> ")
+
     # If CTRL + C keys pressed during input, abort script and exit game.
     except KeyboardInterrupt:
       print()
